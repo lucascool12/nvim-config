@@ -17,3 +17,8 @@ vim.opt.termguicolors = true
 -- vim.cmd([[set clipboard=unnamedplus]])
 
 vim.cmd([[let g:python3_host_prog = '/usr/bin/python3.9']])
+
+vim.cmd([[
+syntax on
+filetype indent on
+]])

@@ -3,10 +3,9 @@ require'nvim-treesitter.configs'.setup {
 
   highlight = {
     enable = true,
-    indentation = false,
   },
   indent = {
-    disable = true
+    enable = true,
   },
 }
 
@@ -16,3 +15,4 @@ require'nvim-treesitter.configs'.setup {
 -- autocmd FileType python set autoindent
 -- autocmd FileType python set smartindent
 -- ]])
+

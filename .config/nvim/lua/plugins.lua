@@ -73,13 +73,13 @@ require('packer').startup(function(use)
     "glepnir/lspsaga.nvim",
     branch = "main",
   })
+  use 'Vimjas/vim-python-pep8-indent'
   use {
     'nvim-telescope/telescope.nvim', tag = '0.1.0',
     -- or                            , branch = '0.1.x',
     requires = { {'nvim-lua/plenary.nvim'} }
   }
   use 'BurntSushi/ripgrep'
-  use 'Vimjas/vim-python-pep8-indent'
   use({
     "iamcco/markdown-preview.nvim",
     run = function() vim.fn["mkdp#util#install"]() end,
