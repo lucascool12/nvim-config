@@ -1,6 +1,6 @@
 -- lazygit
 local Terminal  = require('toggleterm.terminal').Terminal
-local lazygit = Terminal:new({
+local lazygit_config = {
   id = 10,
   cmd = "lazygit",
   dir = "git_dir",
@@ -24,10 +24,25 @@ local lazygit = Terminal:new({
   on_close = function(term)
     vim.cmd("startinsert!")
   end,
-})
+}
+
+local lazygit_yadm_config = {}
+for k, v in pairs(lazygit_config) do
+  lazygit_yadm_config[k] = v
+end
+lazygit_yadm_config.cmd = "lazygit --git-dir=$HOME/.config/yadm/repo.git --work-tree=$HOME"
+lazygit_yadm_config.dir = nil
+
+local lazygit = Terminal:new(lazygit_config)
+local lazygit_yadm = Terminal:new(lazygit_yadm_config)
 
 function _lazygit_toggle()
-  lazygit:toggle()
+  vim.fn.system("git rev-parse --is-inside-work-tree")
+  if (vim.v.shell_error ~= 0) and vim.loop.cwd():find(vim.fs.normalize('~/.'), 1, true) == 1 then
+    lazygit_yadm:toggle()
+  else
+    lazygit:toggle()
+  end
 end
 
 vim.api.nvim_set_keymap("n", "<leader>g", "<cmd>lua _lazygit_toggle()<CR>", {noremap = true, silent = true})

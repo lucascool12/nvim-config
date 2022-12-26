@@ -24,11 +24,27 @@ cmp.setup({
     ['<CR>'] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
   }),
   sources = cmp.config.sources({
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' }, -- For luasnip users.
+    { name = 'nvim_lsp', group_index = 1, priority = 9 },
+    { name = 'luasnip', group_index = 1, priority = 5}, -- For luasnip users.
   }, {
-    { name = 'buffer' },
-  })
+    { name = 'buffer', group_index = 2, priority = 1 },
+  }),
+  sorting = {
+    priority_weight = 1.0,
+    comparators = {
+      -- cmp.score_offset, -- not good at all
+      cmp.locality,
+      cmp.recently_used,
+      cmp.score, -- based on :  score = score + ((#sources - (source_index - 1)) * sorting.priority_weight)
+      cmp.offset,
+      cmp.order,
+      -- cmp.scopes, -- what?
+      -- cmp.sort_text,
+      -- cmp.exact,
+      -- cmp.kind,
+      -- cmp.length, -- useless 
+    },
+  },
 })
 
 -- Set configuration for specific filetype.
