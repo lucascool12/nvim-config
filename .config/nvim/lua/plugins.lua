@@ -17,6 +17,7 @@ require('packer').startup(function(use)
 	use "EdenEast/nightfox.nvim"
   use 'milisims/nvim-luaref'
   use "folke/neodev.nvim"
+  use 'goerz/jupytext.vim'
 	use {
     'nvim-tree/nvim-tree.lua',
   	requires = {
