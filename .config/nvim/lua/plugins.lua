@@ -15,6 +15,8 @@ local packer_bootstrap = ensure_packer()
 require('packer').startup(function(use)
 	use 'wbthomason/packer.nvim'
 	use "EdenEast/nightfox.nvim"
+  use 'milisims/nvim-luaref'
+  use "folke/neodev.nvim"
 	use {
     'nvim-tree/nvim-tree.lua',
   	requires = {

@@ -36,7 +36,7 @@ lazygit_yadm_config.dir = nil
 local lazygit = Terminal:new(lazygit_config)
 local lazygit_yadm = Terminal:new(lazygit_yadm_config)
 
-function _lazygit_toggle()
+function Lazygit_toggle()
   vim.fn.system("git rev-parse --is-inside-work-tree")
   if (vim.v.shell_error ~= 0) and vim.loop.cwd():find(vim.fs.normalize('~/.'), 1, true) == 1 then
     lazygit_yadm:toggle()
@@ -45,4 +45,4 @@ function _lazygit_toggle()
   end
 end
 
-vim.api.nvim_set_keymap("n", "<leader>g", "<cmd>lua _lazygit_toggle()<CR>", {noremap = true, silent = true})
+vim.api.nvim_set_keymap("n", "<leader>g", "<cmd>lua Lazygit_toggle()<CR>", {noremap = true, silent = true})
