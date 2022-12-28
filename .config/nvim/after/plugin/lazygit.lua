@@ -38,7 +38,8 @@ local lazygit_yadm = Terminal:new(lazygit_yadm_config)
 
 function Lazygit_toggle()
   vim.fn.system("git rev-parse --is-inside-work-tree")
-  if (vim.v.shell_error ~= 0) and vim.loop.cwd():find(vim.fs.normalize('~/.'), 1, true) == 1 then
+  if ((vim.v.shell_error ~= 0) and vim.loop.cwd():find(vim.fs.normalize('~/.'), 1, true) == 1)
+    or (vim.loop.cwd() == vim.fs.normalize('~/'):sub(1, -2)) then
     lazygit_yadm:toggle()
   else
     lazygit:toggle()
