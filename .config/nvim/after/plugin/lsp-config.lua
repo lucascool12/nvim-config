@@ -6,7 +6,8 @@ local keymap = vim.keymap.set
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-local lsp_signature_config = {}
+local lsp_signature_config = {
+}
 
 function lsp_keymap_attach (client, bufnr)
 	-- lsp-saga
