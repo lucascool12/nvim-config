@@ -1,11 +1,3 @@
--- local keymap = vim.keymap.set
--- -- empty setup using defaults
--- require("nvim-tree").setup()
--- -- ToggleTree
--- keymap("n", "<leader>tt", "<cmd>NvimTreeToggle<cr>")
--- vim.cmd([[
--- nnoremap <leader>l <cmd>call setqflist([])<cr>
--- ]])
 local width = 30
 local function is_file(node)
   if (node.type ~= "file") and (node.type ~= "directory") then
@@ -18,13 +10,6 @@ local function is_file(node)
   return true
 end
 require'neo-tree'.setup{
-  -- source_selector = {
-  --   winbar = false,
-  --   statusline = false,
-  -- },
-  -- window = {
-  --   width = 
-  -- }
   event_handlers = {
     {
       event = "neo_tree_window_after_open",
@@ -69,9 +54,6 @@ require'neo-tree'.setup{
         end
         vim.fn.setreg('""', name)
         vim.fn.setreg("1", name)
-        for index, value in pairs(node) do
-          print(tostring(index) .. "   " .. tostring(value))
-        end
       end,
       yank_relative_name = function(state)
         local node = state.tree:get_node()
