@@ -15,8 +15,6 @@ require'neo-tree'.setup{
       event = "neo_tree_window_after_open",
       handler = function(table)
         if table.position == "left" or table.position == "right" then
-          print(table.winid)
-          print(width)
           vim.api.nvim_win_set_width(table.winid, width)
         end
         vim.cmd('cd .') -- work around for intial open
@@ -35,11 +33,23 @@ require'neo-tree'.setup{
     hijack_netrw_behavior = "open_current",
     window = {
       mappings = {
+        ['<cr>'] = "open_with_window_picker_unless",
+        ['S'] = "split_with_window_picker",
+        ['s'] = "vsplit_with_window_picker",
         ['y'] = "yank_file_name",
         ['Y'] = "yank_relative_name",
       },
     },
     commands = {
+      open_with_window_picker_unless = function(state)
+        local next = next
+        local pot_windows = require'window-picker'.filter_windows()
+        if next(pot_windows) == nil then
+          require'neo-tree.sources.filesystem.commands'.open(state)
+        else
+          require'neo-tree.sources.filesystem.commands'.open_with_window_picker(state)
+        end
+      end,
       yank_file_name = function(state)
         local node = state.tree:get_node()
         print(node.type)

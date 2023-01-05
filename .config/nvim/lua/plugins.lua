@@ -18,12 +18,6 @@ require('packer').startup(function(use)
   use 'milisims/nvim-luaref'
   use "folke/neodev.nvim"
   use 'goerz/jupytext.vim'
-	-- use {
- --    'nvim-tree/nvim-tree.lua',
- --  	requires = {
- --    	'nvim-tree/nvim-web-devicons', -- optional, for file icons
- --  	}
-	-- }
   use {
     "nvim-neo-tree/neo-tree.nvim",
     branch = "v2.x",
@@ -33,6 +27,8 @@ require('packer').startup(function(use)
       "MunifTanjim/nui.nvim",
     }
   }
+
+  use 's1n7ax/nvim-window-picker'
 
 	use {
 		'nvim-lualine/lualine.nvim',
