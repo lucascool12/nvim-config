@@ -37,12 +37,7 @@ require('packer').startup(function(use)
 	use {'romgrk/barbar.nvim', wants = 'nvim-web-devicons'}
 	use 'mfussenegger/nvim-lint'
 
-	use {
-    'lewis6991/gitsigns.nvim',
-  	config = function()
-    		require('gitsigns').setup()
-  	end
-	}
+	use 'lewis6991/gitsigns.nvim'
 
 	use {
 		'stevearc/aerial.nvim',

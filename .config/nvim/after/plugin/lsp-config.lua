@@ -27,7 +27,8 @@ function lsp_keymap_attach (client, bufnr)
 	keymap("n", "<C-LeftMouse>", "<cmd>Lspsaga peek_definition<CR>", { silent = true })
 
 	keymap("n", "<leader>lr", "<cmd>Lspsaga rename<CR>")
-  require "lsp_signature".on_attach(lsp_signature_config, bufnr)  -- Note: add in lsp client on-attach
+  -- require "lsp_signature".on_attach(lsp_signature_config, bufnr)  -- Note: add in lsp client on-attach
+  require'lua.signature'.setup(client)
 end
 
 local on_attach = function(client, bufnr)

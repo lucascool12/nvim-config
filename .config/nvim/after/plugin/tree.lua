@@ -1,3 +1,5 @@
+local tree_exec = require'neo-tree.command'.execute
+
 local width = 30
 local function is_file(node)
   if (node.type ~= "file") and (node.type ~= "directory") then
@@ -30,7 +32,7 @@ require'neo-tree'.setup{
     },
   },
   filesystem = {
-    hijack_netrw_behavior = "open_current",
+    hijack_netrw_behavior = "open_default",
     window = {
       mappings = {
         ['<cr>'] = "open_with_window_picker_unless",
@@ -52,7 +54,6 @@ require'neo-tree'.setup{
       end,
       yank_file_name = function(state)
         local node = state.tree:get_node()
-        print(node.type)
         if not is_file(node) then
           vim.notify("No file selected", nil, nil)
           return
@@ -87,7 +88,6 @@ require'neo-tree'.setup{
     },
   },
 }
-local tree_exec = require'neo-tree.command'.execute
 vim.keymap.set('n', '<leader>tt', function()
   tree_exec({
     action = 'focus',
