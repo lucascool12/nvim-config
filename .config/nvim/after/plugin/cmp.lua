@@ -5,36 +5,31 @@ local t = function(str)
     return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
-local max_items = 30
 local too_long_str = "..."
 
-local format = ""
-
-for _=1,max_items do
-  format = format .. "."
-end
-
 cmp.setup({
-  -- formatting = {
-  --   format = function(entry, vim_item)
-  --     local len = string.len(vim_item.abbr)
-  --     vim_item.abbr = string.sub(vim_item.abbr, 1, 20)
-  --     if len > max_items then
-  --       vim_item.abbr = string.sub(vim_item.abbr, 1, max_items - string.len(too_long_str)) .. too_long_str
-  --     end
-  --     return vim_item
-  --   end,
-  -- },
+  formatting = {
+    format = function(entry, vim_item)
+      local begin = vim.fn.match(vim_item.abbr, "(")
+      if begin == -1 then
+        return vim_item
+      end
+      if vim_item.abbr:sub(begin + 1, begin + 2) == "()" then
+        return vim_item
+      end
+      vim_item.abbr = string.sub(vim_item.abbr, 1, begin + 1) .. too_long_str .. ")"
+      return vim_item
+    end,
+  },
   preselect = cmp.PreselectMode.None,
   snippet = {
-    -- REQUIRED - you must specify a snippet engine
     expand = function(args)
       require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
     end,
   },
   window = {
     completion = cmp.config.window.bordered(),
-    -- documentation = cmp.config.window.bordered(),
+    documentation = cmp.config.window.bordered(),
   },
   mapping = cmp.mapping.preset.insert({
     ["<Tab>"] =  cmp.mapping(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }), {'i'}),
@@ -42,8 +37,7 @@ cmp.setup({
     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.abort(),
-    -- ['<CR>'] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    ['<C-e>'] = cmp.mapping.abort(), -- ['<CR>'] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
     ['<CR>'] = cmp.mapping.confirm(), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
   }),
   sources = cmp.config.sources({
