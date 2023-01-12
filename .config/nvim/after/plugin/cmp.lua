@@ -1,30 +1,30 @@
 local cmp = require'cmp'
+local cmp_comp = require'cmp.config.compare'
 
 local t = function(str)
     return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
-local M = {}
 
-M.max_items = 30
-M.too_long_str = "..."
+local max_items = 30
+local too_long_str = "..."
 
 local format = ""
 
-for _=1,M.max_items do
+for _=1,max_items do
   format = format .. "."
 end
 
 cmp.setup({
-  formatting = {
-    format = function(entry, vim_item)
-      local len = string.len(vim_item.abbr)
-      vim_item.abbr = string.sub(vim_item.abbr, 1, 20)
-      if len > M.max_items then
-        vim_item.abbr = string.sub(vim_item.abbr, 1, M.max_items - string.len(M.too_long_str)) .. M.too_long_str
-      end
-      return vim_item
-    end,
-  },
+  -- formatting = {
+  --   format = function(entry, vim_item)
+  --     local len = string.len(vim_item.abbr)
+  --     vim_item.abbr = string.sub(vim_item.abbr, 1, 20)
+  --     if len > max_items then
+  --       vim_item.abbr = string.sub(vim_item.abbr, 1, max_items - string.len(too_long_str)) .. too_long_str
+  --     end
+  --     return vim_item
+  --   end,
+  -- },
   preselect = cmp.PreselectMode.None,
   snippet = {
     -- REQUIRED - you must specify a snippet engine
@@ -33,7 +33,7 @@ cmp.setup({
     end,
   },
   window = {
-    completion = cmp.config.window.bordered{col_offset = -20},
+    completion = cmp.config.window.bordered(),
     -- documentation = cmp.config.window.bordered(),
   },
   mapping = cmp.mapping.preset.insert({
@@ -47,24 +47,25 @@ cmp.setup({
     ['<CR>'] = cmp.mapping.confirm(), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
   }),
   sources = cmp.config.sources({
-    { name = 'nvim_lsp', group_index = 1, priority = 9 },
-    { name = 'luasnip', group_index = 1, priority = 5}, -- For luasnip users.
-    { name = 'buffer', group_index = 2, priority = 1 },
+    { name = 'nvim_lsp'},
+    { name = 'luasnip'}, -- For luasnip users.
+  },{
+    { name = 'buffer'},
   }),
   sorting = {
-    priority_weight = 1.0,
+    priority_weight = 0,
     comparators = {
       -- cmp.score_offset, -- not good at all
-      cmp.locality,
-      cmp.recently_used,
-      cmp.score, -- based on :  score = score + ((#sources - (source_index - 1)) * sorting.priority_weight)
-      cmp.offset,
-      cmp.order,
-      -- cmp.scopes, -- what?
+      cmp_comp.exact,
+      cmp_comp.recently_used,
+      cmp_comp.locality,
+      cmp_comp.scopes, -- what?
+      cmp_comp.score, -- based on :  score = score + ((#sources - (source_index - 1)) * sorting.priority_weight)
+      cmp_comp.length, -- useless 
+      -- cmp.offset,
+      -- cmp.order,
       -- cmp.sort_text,
-      -- cmp.exact,
       -- cmp.kind,
-      -- cmp.length, -- useless 
     },
   },
 })
@@ -95,3 +96,17 @@ cmp.setup.cmdline(':', {
     { name = 'cmdline' }
   })
 })
+
+-- cmp.event:on("complete_done", function()
+  -- print("trig")
+  -- local en = cmp.get_selected_entry()
+  -- if en ~= nil then
+    -- for key, value in pairs(en) do
+    --   print(tostring(key) .. "   " .. tostring(value))
+    -- end
+    -- print("completion_item")
+    -- for key, value in pairs(en.completion_item) do
+    --   print(tostring(key) .. "   " .. tostring(value))
+    -- end
+  -- end
+-- end)

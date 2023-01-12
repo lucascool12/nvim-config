@@ -12,6 +12,12 @@ local function is_file(node)
   return true
 end
 require'neo-tree'.setup{
+  sources = {
+    "filesystem",
+    "buffers",
+    "git_status",
+    "diagnostics",
+  },
   event_handlers = {
     {
       event = "neo_tree_window_after_open",

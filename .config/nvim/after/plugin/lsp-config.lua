@@ -3,11 +3,28 @@ require("mason").setup()
 require'mason-lspconfig'.setup()
 
 local keymap = vim.keymap.set
-
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
+local configs = require('lspconfig/configs')
+local util = require('lspconfig/util')
+local path = util.path
 
-local lsp_signature_config = {
-}
+local function get_python_path(workspace)
+  -- Use activated virtualenv.
+  if vim.env.VIRTUAL_ENV then
+    return path.join(vim.env.VIRTUAL_ENV, 'bin', 'python')
+  end
+
+  -- Find and use virtualenv in workspace directory.
+  for _, pattern in ipairs({'*', '.*'}) do
+    local match = vim.fn.glob(path.join(workspace, pattern, 'pyvenv.cfg'))
+    if match ~= '' then
+      return path.join(path.dirname(match), 'bin', 'python')
+    end
+  end
+
+  -- Fallback to system Python.
+  return exepath('python3') or exepath('python') or 'python'
+end
 
 function lsp_keymap_attach (client, bufnr)
 	-- lsp-saga
@@ -28,7 +45,7 @@ function lsp_keymap_attach (client, bufnr)
 
 	keymap("n", "<leader>lr", "<cmd>Lspsaga rename<CR>")
   -- require "lsp_signature".on_attach(lsp_signature_config, bufnr)  -- Note: add in lsp client on-attach
-  require'lua.signature'.setup(client)
+  require'signature'.setup(client)
 end
 
 local on_attach = function(client, bufnr)
@@ -64,6 +81,17 @@ require("mason-lspconfig").setup_handlers {
       capabilities = capabilities,
     }
   end,
+  -- ["pyright"] = function ()
+  --   require('lspconfig')['pyright'].setup{
+  --     on_attach = on_attach,
+  --     flags = lsp_flags,
+  --     capabilities = capabilities,
+  --     -- Server-specific settings...
+  --     before_init = function(_, config)
+  --       config.settings.python.pythonPath = get_python_path(config.root_dir)
+  --     end
+  --   }
+  -- end,
   -- Next, you can provide a dedicated handler for specific servers.
   -- For example, a handler override for the `rust_analyzer`:
   ["rust_analyzer"] = function ()

@@ -27,6 +27,11 @@ require('packer').startup(function(use)
       "MunifTanjim/nui.nvim",
     }
   }
+  use {
+    "mrbjarksen/neo-tree-diagnostics.nvim",
+    requires = "nvim-neo-tree/neo-tree.nvim",
+    module = "neo-tree.sources.diagnostics", -- if wanting to lazyload
+  }
 
   use 's1n7ax/nvim-window-picker'
 
