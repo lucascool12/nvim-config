@@ -35,10 +35,11 @@ require('packer').startup(function(use)
 
   use 's1n7ax/nvim-window-picker'
 
-	use {
-		'nvim-lualine/lualine.nvim',
-		requires = { 'kyazdani42/nvim-web-devicons', opt = true }
-	}
+	-- use {
+	-- 	'nvim-lualine/lualine.nvim',
+	-- 	requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+	-- }
+  use 'feline-nvim/feline.nvim'
 	use {'romgrk/barbar.nvim', wants = 'nvim-web-devicons'}
 	use 'mfussenegger/nvim-lint'
 
@@ -56,9 +57,9 @@ require('packer').startup(function(use)
     end
 	}
   use {
-    "ray-x/lsp_signature.nvim",
+    "glepnir/lspsaga.nvim",
+    branch = "main",
   }
-
 	use {
     'nvim-treesitter/nvim-treesitter',
     run = function()
@@ -77,10 +78,6 @@ require('packer').startup(function(use)
   use 'hrsh7th/cmp-path'
   use 'hrsh7th/cmp-cmdline'
   use 'hrsh7th/nvim-cmp'
-  use({
-    "glepnir/lspsaga.nvim",
-    branch = "main",
-  })
   use 'Vimjas/vim-python-pep8-indent'
   use {
     'nvim-telescope/telescope.nvim', tag = '0.1.0',
