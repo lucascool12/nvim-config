@@ -91,16 +91,3 @@ cmp.setup.cmdline(':', {
   })
 })
 
--- cmp.event:on("complete_done", function()
-  -- print("trig")
-  -- local en = cmp.get_selected_entry()
-  -- if en ~= nil then
-    -- for key, value in pairs(en) do
-    --   print(tostring(key) .. "   " .. tostring(value))
-    -- end
-    -- print("completion_item")
-    -- for key, value in pairs(en.completion_item) do
-    --   print(tostring(key) .. "   " .. tostring(value))
-    -- end
-  -- end
--- end)

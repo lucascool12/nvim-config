@@ -12,6 +12,10 @@ local function is_file(node)
   return true
 end
 require'neo-tree'.setup{
+  source_selector = {
+    winbar = false,
+    statusline = false,
+  },
   sources = {
     "filesystem",
     "buffers",
