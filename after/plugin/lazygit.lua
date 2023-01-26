@@ -3,7 +3,7 @@ local Terminal  = require('toggleterm.terminal').Terminal
 local lazygit_config = {
   id = 10,
   cmd = "lazygit",
-  dir = "git_dir",
+  -- dir = "git_dir",
   direction = "float",
   float_opts = {
     border = "double",
@@ -40,6 +40,7 @@ function Lazygit_toggle()
   vim.fn.system("git rev-parse --is-inside-work-tree")
   if ((vim.v.shell_error ~= 0) and vim.loop.cwd():find(vim.fs.normalize('~/.'), 1, true) == 1)
     or (vim.loop.cwd() == vim.fs.normalize('~/'):sub(1, -2)) then
+    print("yaaadm")
     lazygit_yadm:toggle()
   else
     lazygit:toggle()
