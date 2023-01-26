@@ -29,6 +29,10 @@ local open_signature = function()
 
   for _, client in pairs(clients) do
     local triggers = client.server_capabilities.signatureHelpProvider.triggerCharacters
+    -- print(triggers)
+    -- for key, value in pairs(triggers) do
+    --   print(tostring(key) .. "  " .. tostring(value))
+    -- end
 
     -- csharp has wrong trigger chars for some odd reason
     if client.name == 'csharp' then
@@ -45,10 +49,10 @@ local open_signature = function()
   end
 
   if triggered then
-    print("triggered")
     local params = util.make_position_params()
     vim.lsp.buf_request(0, 'textDocument/signatureHelp', params, handler)
   end
+ end
 end
 
 M.setup = function(client)

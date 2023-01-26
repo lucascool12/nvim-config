@@ -1,4 +1,5 @@
 require('plugins')
+require'signature'
 -- auto packerCompile on saveing plugins.lua, doesnt work
 vim.cmd([[
   augroup packer_user_config

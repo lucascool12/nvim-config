@@ -83,13 +83,10 @@ require("mason-lspconfig").setup_handlers {
   end,
   -- ["pyright"] = function ()
   --   require('lspconfig')['pyright'].setup{
+  --     cmd = { "pyright-langserver", "--stdio" , "-p", "~/python-type-stubs"},
   --     on_attach = on_attach,
   --     flags = lsp_flags,
   --     capabilities = capabilities,
-  --     -- Server-specific settings...
-  --     before_init = function(_, config)
-  --       config.settings.python.pythonPath = get_python_path(config.root_dir)
-  --     end
   --   }
   -- end,
   -- Next, you can provide a dedicated handler for specific servers.
