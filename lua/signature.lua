@@ -52,7 +52,6 @@ local open_signature = function()
     local params = util.make_position_params()
     vim.lsp.buf_request(0, 'textDocument/signatureHelp', params, handler)
   end
- end
 end
 
 M.setup = function(client)

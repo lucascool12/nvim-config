@@ -13,6 +13,8 @@ end
 local packer_bootstrap = ensure_packer()
 
 require('packer').startup(function(use)
+  use 'Yggdroot/indentLine'
+  use 'nvim-lua/lsp-status.nvim'
 	use 'wbthomason/packer.nvim'
 	use "EdenEast/nightfox.nvim"
   use 'milisims/nvim-luaref'
