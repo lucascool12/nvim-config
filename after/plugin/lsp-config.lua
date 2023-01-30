@@ -49,6 +49,7 @@ end
 
 local on_attach = function(client, bufnr)
   lsp_keymap_attach(client, bufnr)
+  require'lsp-status'.on_attach(client, bufnr)
   -- require'lsp_signature'.on_attach(lsp_sig_config, bufnr)
 end
 
@@ -105,6 +106,7 @@ require("mason-lspconfig").setup_handlers {
     require'lspconfig'.sumneko_lua.setup {
       on_attach = on_attach,
       capabilities = capabilities,
+      flags = lsp_flags,
       settings = {
         Lua = {
           runtime = {
@@ -117,7 +119,7 @@ require("mason-lspconfig").setup_handlers {
           },
           workspace = {
             -- Make the server aware of Neovim runtime files
-            library = vim.api.nvim_get_runtime_file("", true),
+            library = table.insert(vim.api.nvim_get_runtime_file("", true), { vim.fs.normalize(vim.fn.stdpath("config") .. "/lua")}),
           },
           -- Do not send telemetry data containing a randomized but unique identifier
           telemetry = {
@@ -165,8 +167,3 @@ for type, icon in pairs({
 	local hl = "DiagnosticSign" .. type
 	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
 end
-
--- lsp-saga
-local saga = require('lspsaga')
-
-saga.setup({})

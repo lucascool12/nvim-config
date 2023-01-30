@@ -60,7 +60,4 @@ M.tabline_colors_from_theme = function ()
   }
 end
 
-M.ViModeHl = "ViModeHl"
-M.ViModeSepHl = "ViModeSepHl"
-
 return M
