@@ -1,71 +1,14 @@
-local u = require'lua.ui.feline.util'
+-- mostly inspired/stolen from https://github.com/EdenEast/nyx/tree/8a9819e4ea11193434b2366b9f1d65ed3a4661f3/config/.config/nvim
+local u = require'ui.feline.util'
 local fmt = string.format
+local diagnostic = vim.diagnostic
+local colors = require'ui.colors'
 
-local M = {}
-
-local function highlight(group, color)
-  local style = color.style and "gui=" .. color.style or "gui=NONE"
-  local fg = color.fg and "guifg=" .. color.fg or "guifg=NONE"
-  local bg = color.bg and "guibg=" .. color.bg or "guibg=NONE"
-  local sp = color.sp and "guisp=" .. color.sp or ""
-  local hl = "highlight " .. group .. " " .. style .. " " .. fg .. " " .. bg .. " " .. sp
-  vim.cmd(hl)
-
-  if color.link then
-    vim.cmd("highlight! link " .. group .. " " .. color.link)
-  end
-end
-
-local function fromhl(hl)
-  local result = {}
-  local list = vim.api.nvim_get_hl_by_name(hl, true)
-  for k, v in pairs(list) do
-    local name = k == "background" and "bg" or "fg"
-    result[name] = string.format("#%06x", v)
-  end
-  return result
-end
-
-local function term(num, default)
-  local key = "terminal_color_" .. num
-  return vim.g[key] and vim.g[key] or default
-end
-
-local function colors_from_theme()
-  return {
-    bg = fromhl("StatusLine").bg, -- or "#2E3440",
-    alt = fromhl("CursorLine").bg, -- or "#475062",
-    fg = fromhl("StatusLine").fg, -- or "#8FBCBB",
-    hint = fromhl("DiagnosticHint").bg or "#5E81AC",
-    info = fromhl("DiagnosticInfo").bg or "#81A1C1",
-    warn = fromhl("DiagnosticWarn").bg or "#EBCB8B",
-    err = fromhl("DiagnosticError").bg or "#EC5F67",
-    black = term(0, "#434C5E"),
-    red = term(1, "#EC5F67"),
-    green = term(2, "#8FBCBB"),
-    yellow = term(3, "#EBCB8B"),
-    blue = term(4, "#5E81AC"),
-    magenta = term(5, "#B48EAD"),
-    cyan = term(6, "#88C0D0"),
-    white = term(7, "#ECEFF4"),
-  }
-end
-
-local function tabline_colors_from_theme()
-  return {
-    tabl = fromhl("TabLine"),
-    norm = fromhl("Normal"),
-    sel = fromhl("TabLineSel"),
-    fill = fromhl("TabLineFill"),
-  }
-end
-
-M.gen_highlights = function()
-  local c = colors_from_theme()
+local gen_highlights = function()
+  local c = colors.stline_colors_from_theme()
   local sfg = vim.o.background == "dark" and c.black or c.white
   local sbg = vim.o.background == "dark" and c.white or c.black
-  local ct = tabline_colors_from_theme()
-  M.colors = c
+  local ct = colors.tabline_colors_from_theme()
   local groups = {
     FlnViBlack = { fg = c.white, bg = c.black, style = "bold" },
     FlnViRed = { fg = c.bg, bg = c.red, style = "bold" },
@@ -97,6 +40,7 @@ M.gen_highlights = function()
     FlnHintInfo = { fg = c.hint, bg = c.info },
     FlnInfoWarn = { fg = c.info, bg = c.warn },
     FlnWarnError = { fg = c.warn, bg = c.err },
+    FlnWarnErrorBg = { fg = c.err, bg = c.bg }, -- changed
     FlnErrorStatus = { fg = c.err, bg = sbg },
     FlnStatusBg = { fg = sbg, bg = c.bg },
 
@@ -106,33 +50,39 @@ M.gen_highlights = function()
     FlnGitBranch = { fg = c.yellow, bg = c.bg },
     FlnGitSeperator = { fg = c.bg, bg = c.alt },
     FlnNeoTreeSource= { fg = c.yellow, bg = c.bg },
+    -- vi modes
   }
   for k, v in pairs(groups) do
-    highlight(k, v)
+    colors.highlight(k, v)
   end
 end
 
-M.gen_highlights()
+gen_highlights()
 
-local get_diag = function(str)
-  if vim.lsp.diagnostic.get_count == nil then
-    return ""
-  end
-  local count = vim.lsp.diagnostic.get_count(0, str)
+local get_diag = function(severity)
+  local count = vim.tbl_count(diagnostic.get(0, severity and {severity = severity }))
   return (count > 0) and " " .. count .. " " or ""
+end
+
+local function vi_mode_hl()
+  return u.vi.colors[vim.fn.mode()] or "FlnViBlack"
+end
+
+local function vi_sep_hl()
+  return u.vi.sep[vim.fn.mode()] or "FlnBlack"
 end
 
 local c = {
   vimode = {
-    provider = function()
-      return string.format(" %s ", u.vi.text[vim.fn.mode()])
-    end,
+    provider = 'vi_mode',
     hl = vi_mode_hl,
-    right_sep = { str = " ", hl = vi_sep_hl },
+    right_sep = { str = " ", hl = vi_sep_hl }, -- " "
+    left_sep = { str = u.icons.block, hl = vi_sep_hl }, -- " "
+    icon = '',
   },
   gitbranch = {
     provider = "git_branch",
-    icon = " ",
+    icon = "  ",
     hl = "FlnGitBranch",
     right_sep = { str = "  ", hl = "FlnGitBranch" },
     enabled = function()
@@ -147,7 +97,13 @@ local c = {
   },
   neo_tree_source = {
     provider = function ()
-      return fmt("%s ", vim.b.neo_tree_source)
+      local neo_tree_sources = {
+        filesystem = " filesystem",
+        diagnostics = " diagnostics",
+        buffers = "﬘ buffers",
+        git_status = " git status" ,
+      }
+      return fmt("%s ", neo_tree_sources[vim.b.neo_tree_source] or "")
     end,
     hl = "FlnNeoTreeSource",
     right_sep = { str = "  ", hl = "FlnNeoTreeSource" },
@@ -203,28 +159,29 @@ local c = {
   },
   lsp_error = {
     provider = function()
-      return get_diag("Error")
+      return get_diag(diagnostic.severity.ERROR)
     end,
     hl = "FlnError",
+    left_sep = { str = "", hl = "FlnWarnErrorBg", always_visible = true }, -- only if no status
     right_sep = { str = "", hl = "FlnWarnError", always_visible = true },
   },
   lsp_warn = {
     provider = function()
-      return get_diag("Warning")
+      return get_diag(diagnostic.severity.WARN)
     end,
     hl = "FlnWarn",
     right_sep = { str = "", hl = "FlnInfoWarn", always_visible = true },
   },
   lsp_info = {
     provider = function()
-      return get_diag("Information")
+      return get_diag(diagnostic.severity.INFO)
     end,
     hl = "FlnInfo",
     right_sep = { str = "", hl = "FlnHintInfo", always_visible = true },
   },
   lsp_hint = {
     provider = function()
-      return get_diag("Hint")
+      return get_diag(diagnostic.severity.HINT)
     end,
     hl = "FlnHint",
     right_sep = { str = "", hl = "FlnBgHint", always_visible = true },
@@ -248,7 +205,7 @@ local active = {
     c.default, -- must be last
   },
   { -- right
-    c.lsp_status,
+    -- c.lsp_status,
     c.lsp_error,
     c.lsp_warn,
     c.lsp_info,
@@ -268,7 +225,7 @@ local active_tree = {
     c.default, -- must be last
   },
   { -- right
-    c.lsp_status,
+    -- c.lsp_status,
     c.lsp_error,
     c.lsp_warn,
     c.lsp_info,

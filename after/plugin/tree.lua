@@ -107,3 +107,4 @@ vim.keymap.set('n', '<leader>tt', function()
     -- dir = '.',
   })
 end)
+vim.g.neo_tree_remove_legacy_commands = 1
