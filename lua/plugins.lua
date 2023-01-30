@@ -14,6 +14,7 @@ local packer_bootstrap = ensure_packer()
 
 require('packer').startup(function(use)
   use 'Yggdroot/indentLine'
+  use 'j-hui/fidget.nvim'
   use 'nvim-lua/lsp-status.nvim'
 	use 'wbthomason/packer.nvim'
 	use "EdenEast/nightfox.nvim"
@@ -61,6 +62,10 @@ require('packer').startup(function(use)
   use {
     "glepnir/lspsaga.nvim",
     branch = "main",
+    config = function()
+        require("lspsaga").setup({})
+    end,
+    requires = { {"nvim-tree/nvim-web-devicons"} }
   }
 	use {
     'nvim-treesitter/nvim-treesitter',
