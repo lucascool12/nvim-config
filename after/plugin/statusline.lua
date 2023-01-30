@@ -50,7 +50,6 @@ local gen_highlights = function()
     FlnGitBranch = { fg = c.yellow, bg = c.bg },
     FlnGitSeperator = { fg = c.bg, bg = c.alt },
     FlnNeoTreeSource= { fg = c.yellow, bg = c.bg },
-    -- vi modes
   }
   for k, v in pairs(groups) do
     colors.highlight(k, v)
@@ -120,7 +119,7 @@ local c = {
     provider = { name = "file_info", opts = { type = "relative" } },
     hl = "FlnAlt",
     left_sep = { str = " ", hl = "FlnAltSep" },
-    right_sep = { str = "", hl = "FlnAltSep" },
+    right_sep = { str = " ", hl = "FlnAltSep" },
   },
   file_enc = {
     provider = function()
