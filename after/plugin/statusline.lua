@@ -141,7 +141,7 @@ local c = {
     provider = function()
       return " " .. require("feline.providers.cursor").line_percentage() .. "  "
     end,
-    -- hl = vi_mode_hl,
+    hl = vi_mode_hl,
     left_sep = { str = u.icons.left, hl = vi_mode_hl },
   },
   default = { -- needed to pass the parent StatusLine hl group to right hand side

@@ -22,6 +22,10 @@ require('packer').startup(function(use)
   use "folke/neodev.nvim"
   use 'goerz/jupytext.vim'
   use {
+    'jose-elias-alvarez/null-ls.nvim',
+    requires = { "nvim-lua/plenary.nvim" },
+  }
+  use {
     "nvim-neo-tree/neo-tree.nvim",
     branch = "v2.x",
     requires = {
@@ -63,7 +67,11 @@ require('packer').startup(function(use)
     "glepnir/lspsaga.nvim",
     branch = "main",
     config = function()
-        require("lspsaga").setup({})
+      require("lspsaga").setup({
+        lightbulb = {
+          enable = false,
+        },
+      })
     end,
     requires = { {"nvim-tree/nvim-web-devicons"} }
   }

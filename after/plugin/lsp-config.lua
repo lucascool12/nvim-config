@@ -141,7 +141,9 @@ require('lspconfig')['turtle_ls'].setup{
 
 -- cursor hover on error, faster updatetime
 vim.cmd([[set updatetime=1000]])
-vim.diagnostic.config({ virtual_text = false })
+vim.diagnostic.config({
+  virtual_text = false,
+})
 vim.api.nvim_create_autocmd({ "CursorHold" }, {
 	callback = function()
 		if vim.lsp.buf.server_ready() then
