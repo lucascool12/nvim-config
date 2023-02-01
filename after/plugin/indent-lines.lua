@@ -1,3 +1,9 @@
+local fn = vim.fn
+local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+if fn.empty(fn.glob(install_path)) > 0 then
+  return
+end
+
 function Set (list)
   local set = {}
   for _, l in ipairs(list) do set[l] = true end
