@@ -48,7 +48,6 @@ require('packer').startup(function(use)
 	-- }
   use 'feline-nvim/feline.nvim'
 	use {'romgrk/barbar.nvim', wants = 'nvim-web-devicons'}
-	use 'mfussenegger/nvim-lint'
 
 	use 'lewis6991/gitsigns.nvim'
 
