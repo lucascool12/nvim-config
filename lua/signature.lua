@@ -55,6 +55,9 @@ local open_signature = function()
 end
 
 M.setup = function(client)
+  if client.server_capabilities.signatureHelpProvider == nil then
+    return
+  end
   local handler_butt = vim.lsp.with(vim.lsp.handlers.signature_help, {
     border = "rounded",
     silent = true,
