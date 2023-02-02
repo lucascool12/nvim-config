@@ -49,8 +49,7 @@ end
 
 local on_attach = function(client, bufnr)
   lsp_keymap_attach(client, bufnr)
-  require'lsp-status'.on_attach(client, bufnr)
-  -- require'lsp_signature'.on_attach(lsp_sig_config, bufnr)
+  -- require'lsp-status'.on_attach(client, bufnr)
 end
 
 local lsp_flags = {

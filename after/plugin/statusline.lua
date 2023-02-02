@@ -58,6 +58,12 @@ end
 
 gen_highlights()
 
+vim.api.nvim_create_autocmd("ColorScheme", {
+  callback = function ()
+    gen_highlights()
+  end,
+})
+
 local get_diag = function(severity)
   local count = vim.tbl_count(diagnostic.get(0, severity and {severity = severity }))
   return (count > 0) and " " .. count .. " " or ""
@@ -148,14 +154,14 @@ local c = {
     provider = "",
     hl = "StatusLine",
   },
-  lsp_status = {
-    provider = function()
-      return require("lsp-status").status()
-    end,
-    hl = "FlnStatus",
-    left_sep = { str = "", hl = "FlnStatusBg", always_visible = true },
-    right_sep = { str = "", hl = "FlnErrorStatus", always_visible = true },
-  },
+  -- lsp_status = {
+  --   provider = function()
+  --     return require("lsp-status").status()
+  --   end,
+  --   hl = "FlnStatus",
+  --   left_sep = { str = "", hl = "FlnStatusBg", always_visible = true },
+  --   right_sep = { str = "", hl = "FlnErrorStatus", always_visible = true },
+  -- },
   lsp_error = {
     provider = function()
       return get_diag(diagnostic.severity.ERROR)
