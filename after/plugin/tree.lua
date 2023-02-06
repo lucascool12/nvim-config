@@ -46,6 +46,7 @@ require'neo-tree'.setup{
     window = {
       mappings = {
         ['<cr>'] = "open_with_window_picker_unless",
+        ['<2-leftmouse>'] = "open_with_window_picker_unless",
         ['S'] = "split_with_window_picker",
         ['s'] = "vsplit_with_window_picker",
         ['y'] = "yank_file_name",
