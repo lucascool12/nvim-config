@@ -6,7 +6,22 @@ local t = function(str)
 end
 
 local too_long_str = "..."
-
+local hasMove = false
+cmp.event:on("menu_closed",
+function ()
+  hasMove = false
+end)
+local function confirm_with_and_wo_preselect(fallback)
+  if not cmp.confirm({ select = hasMove}) then
+    fallback()
+  end
+end
+local function reg_move(move)
+  return function(fallback)
+    hasMove = true
+    move(fallback)
+  end
+end
 cmp.setup({
   formatting = {
     format = function(entry, vim_item)
@@ -21,7 +36,10 @@ cmp.setup({
       return vim_item
     end,
   },
-  preselect = cmp.PreselectMode.None,
+  completion = {
+    completeopt = "menu,menuone,noselect,noinsert",
+  },
+  preselect = require'cmp.types'.cmp.PreselectMode.Item,
   snippet = {
     expand = function(args)
       require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
@@ -32,13 +50,13 @@ cmp.setup({
     documentation = cmp.config.window.bordered(),
   },
   mapping = cmp.mapping.preset.insert({
-    ["<Tab>"] =  cmp.mapping(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }), {'i'}),
-    ["<S-Tab>"] =  cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }), {'i'}),
+    ["<Tab>"] = cmp.mapping(reg_move(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }), {'i'})),
+    ["<S-Tab>"] = cmp.mapping(reg_move(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }), {'i'})),
     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping.abort(), -- ['<CR>'] = cmp.mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-    ['<CR>'] = cmp.mapping.confirm(), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    ['<CR>'] = confirm_with_and_wo_preselect, -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
   }),
   sources = cmp.config.sources({
     { name = 'nvim_lsp'},
@@ -51,10 +69,10 @@ cmp.setup({
     comparators = {
       -- cmp.score_offset, -- not good at all
       cmp_comp.exact,
-      cmp_comp.recently_used,
       cmp_comp.locality,
       cmp_comp.scopes, -- what?
       cmp_comp.score, -- based on :  score = score + ((#sources - (source_index - 1)) * sorting.priority_weight)
+      cmp_comp.recently_used,
       cmp_comp.length, -- useless 
       -- cmp.offset,
       -- cmp.order,
@@ -90,4 +108,3 @@ cmp.setup.cmdline(':', {
     { name = 'cmdline' }
   })
 })
-
