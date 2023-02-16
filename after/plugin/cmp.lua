@@ -59,6 +59,8 @@ cmp.setup({
     ['<CR>'] = confirm_with_and_wo_preselect, -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
   }),
   sources = cmp.config.sources({
+    { name = 'nvim_lua'},
+  },{
     { name = 'nvim_lsp'},
     { name = 'luasnip'}, -- For luasnip users.
   },{
