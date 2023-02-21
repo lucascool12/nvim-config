@@ -1,4 +1,5 @@
 local null_ls = require'null-ls'
+local method = require'null-ls.methods'
 local flake8_config = { '--max-line-length', '120' }
 null_ls.setup{
   sources = {
@@ -19,5 +20,8 @@ null_ls.setup{
     --     }
     --   end)()
     -- ),
+    null_ls.builtins.diagnostics.mypy.with({
+      method = method.internal.DIAGNOSTICS_ON_SAVE,
+    }),
   },
 }
