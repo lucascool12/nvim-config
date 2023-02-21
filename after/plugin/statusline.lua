@@ -119,13 +119,13 @@ local c = {
     end,
     hl = "FlnAlt",
     left_sep = { str = " ", hl = "FlnAltSep" },
-    right_sep = { str = "", hl = "FlnAltSep" },
+    right_sep = { str = " ", hl = "FlnAltSep" },
   },
   fileinfo = {
     provider = { name = "file_info", opts = { type = "relative" } },
     hl = "FlnAlt",
     left_sep = { str = " ", hl = "FlnAltSep" },
-    right_sep = { str = " ", hl = "FlnAltSep" },
+    right_sep = { str = "  ", hl = "FlnAltSep" },
   },
   file_enc = {
     provider = function()
