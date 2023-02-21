@@ -1,6 +1,8 @@
 local cmp = require'cmp'
 local cmp_comp = require'cmp.config.compare'
-
+local packer_root = require'packer'.config.package_root
+require("luasnip.loaders.from_vscode").lazy_load()
+-- require'luasnip'.
 local t = function(str)
     return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
@@ -12,7 +14,7 @@ function ()
   hasMove = false
 end)
 local function confirm_with_and_wo_preselect(fallback)
-  if not cmp.confirm({ select = hasMove}) then
+  if not cmp.confirm({ select = hasMove }) then
     fallback()
   end
 end
@@ -22,6 +24,25 @@ local function reg_move(move)
     move(fallback)
   end
 end
+
+vim.cmd([[
+set completeopt=menu,menuone,noselect
+]])
+
+
+local function border(hl_name)
+  return {
+    { "⎧", hl_name },
+    { "─", hl_name },
+    { "⎫", hl_name },
+    { "⎪", hl_name },
+    { "⎭", hl_name },
+    { "─", hl_name },
+    { "⎩", hl_name },
+    { "│", hl_name },
+  }
+end
+
 cmp.setup({
   formatting = {
     format = function(entry, vim_item)
@@ -46,8 +67,8 @@ cmp.setup({
     end,
   },
   window = {
-    completion = cmp.config.window.bordered(),
-    documentation = cmp.config.window.bordered(),
+    completion = cmp.config.window.bordered(border ""),
+    documentation = cmp.config.window.bordered(border ""),
   },
   mapping = cmp.mapping.preset.insert({
     ["<Tab>"] = cmp.mapping(reg_move(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }), {'i'})),
@@ -62,20 +83,20 @@ cmp.setup({
     { name = 'nvim_lua'},
   },{
     { name = 'nvim_lsp'},
-    { name = 'luasnip'}, -- For luasnip users.
+    { name = 'luasnip', option = { use_show_condition = false } }, -- For luasnip users.
   },{
     { name = 'buffer'},
   }),
   sorting = {
-    priority_weight = 0,
+    priority_weight = 1,
     comparators = {
       -- cmp.score_offset, -- not good at all
       cmp_comp.exact,
+      cmp_comp.score, -- based on :  score = score + ((#sources - (source_index - 1)) * sorting.priority_weight)
       cmp_comp.locality,
       cmp_comp.scopes, -- what?
-      cmp_comp.score, -- based on :  score = score + ((#sources - (source_index - 1)) * sorting.priority_weight)
-      cmp_comp.recently_used,
       cmp_comp.length, -- useless 
+      cmp_comp.recently_used,
       -- cmp.offset,
       -- cmp.order,
       -- cmp.sort_text,
