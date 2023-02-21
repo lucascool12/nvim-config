@@ -109,6 +109,7 @@ require('packer').startup(function(use)
   use 'williamboman/mason.nvim'
   use 'williamboman/mason-lspconfig.nvim'
   use 'windwp/nvim-ts-autotag'
+  use 'gbprod/yanky.nvim'
   use {"shortcuts/no-neck-pain.nvim", tag = "*" }
 	end
 )
