@@ -12,7 +12,9 @@ vim.opt.termguicolors = true
 
 -- vim.cmd([[set clipboard=unnamedplus]])
 
--- vim.cmd([[let g:python3_host_prog = '/usr/bin/python3.9']])
+if vim.fn.has('macunix') then
+  vim.cmd([[let g:python3_host_prog = '/usr/bin/python3.11']])
+end
 
 vim.cmd([[
 syntax on
