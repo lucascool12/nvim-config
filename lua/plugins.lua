@@ -120,6 +120,18 @@ require('packer').startup(function(use)
     end
   }
   use 'gbprod/yanky.nvim'
+  use {
+    "smjonas/live-command.nvim",
+    -- live-command supports semantic versioning via tags
+    -- tag = "1.*",
+    config = function()
+      require("live-command").setup {
+        commands = {
+          Norm = { cmd = "norm" },
+        },
+      }
+    end,
+  }
   use {"shortcuts/no-neck-pain.nvim", tag = "*" }
 	end
 )
