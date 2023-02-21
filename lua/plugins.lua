@@ -109,6 +109,16 @@ require('packer').startup(function(use)
   use 'williamboman/mason.nvim'
   use 'williamboman/mason-lspconfig.nvim'
   use 'windwp/nvim-ts-autotag'
+  use {
+    "gbprod/cutlass.nvim",
+    config = function()
+      require("cutlass").setup({
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      })
+    end
+  }
   use 'gbprod/yanky.nvim'
   use {"shortcuts/no-neck-pain.nvim", tag = "*" }
 	end
