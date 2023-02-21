@@ -6,6 +6,7 @@ local keymap = vim.keymap.set
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 local configs = require('lspconfig/configs')
 local util = require('lspconfig/util')
+local lspconfig = require'lspconfig'
 local path = util.path
 
 local function get_python_path(workspace)
@@ -44,11 +45,11 @@ function lsp_keymap_attach (client, bufnr)
 	keymap("n", "<C-LeftMouse>", "<cmd>Lspsaga peek_definition<CR>", { silent = true })
 
 	keymap("n", "<leader>lr", "<cmd>Lspsaga rename<CR>")
-  require'signature'.setup(client)
 end
 
 local on_attach = function(client, bufnr)
   lsp_keymap_attach(client, bufnr)
+  require'signature'.setup(client)
   -- require'lsp-status'.on_attach(client, bufnr)
 end
 
@@ -65,6 +66,24 @@ local function mason_ensure_installed(servers)
     end
   end
 end
+--
+-- vim.api.nvim_create_user_command("MasonInstallPip3rdPlugins", function (t)
+--   local package = t.fargs[1]
+--   local plugin = t.fargs[2]
+--   local mr = require'mason-registry'
+--   local path_package = mr.get_package(package):get_install_path()
+--   local pip_venv = vim.fs.normalize(path_package .. "/venv/bin/pip")
+--   local install_cmd = pip_venv .. " install " .. plugin
+--   local output = vim.fn.system(install_cmd)
+--   if vim.v.shell_error ~= 0 then
+--     print("Install: " .. plugin .. "failed:" .. output)
+--     print("command used: " .. install_cmd)
+--   end
+-- end,
+-- {
+--   nargs = "+",
+-- })
+--
 
 local ensure_installed = {'lua-language-server', 'rust-analyzer', 'pyright'}
 mason_ensure_installed(ensure_installed)
@@ -80,18 +99,25 @@ require("mason-lspconfig").setup_handlers {
       capabilities = capabilities,
     }
   end,
-  -- ["pyright"] = function ()
-  --   require('lspconfig')['pyright'].setup{
-  --     cmd = { "pyright-langserver", "--stdio" , "-p", "~/python-type-stubs"},
-  --     on_attach = on_attach,
-  --     flags = lsp_flags,
-  --     capabilities = capabilities,
-  --   }
-  -- end,
-  -- Next, you can provide a dedicated handler for specific servers.
-  -- For example, a handler override for the `rust_analyzer`:
+  ["pylsp"] = function ()
+    lspconfig['pylsp'].setup{
+      on_attach = on_attach,
+      flags = lsp_flags,
+      capabilities = capabilities,
+      -- Server-specific settings...
+      settings = {
+        pylsp = {
+          plugins = {
+            pycodestyle = {
+              maxLineLength = 120,
+            }
+          }
+        }
+      }
+    }
+  end,
   ["rust_analyzer"] = function ()
-    require('lspconfig')['rust_analyzer'].setup{
+    lspconfig['rust_analyzer'].setup{
       on_attach = on_attach,
       flags = lsp_flags,
       capabilities = capabilities,
@@ -101,8 +127,8 @@ require("mason-lspconfig").setup_handlers {
       }
     }
   end,
-  ["sumneko_lua"] = function()
-    require'lspconfig'.sumneko_lua.setup {
+  ["lua_ls"] = function()
+    require'lspconfig'['lua_ls'].setup {
       on_attach = on_attach,
       capabilities = capabilities,
       flags = lsp_flags,
@@ -128,10 +154,25 @@ require("mason-lspconfig").setup_handlers {
       },
     }
   end,
+  ["pyright"] = function ()
+    lspconfig['pyright'].setup{
+      on_attach = on_attach,
+      flags = lsp_flags,
+      capabilities = capabilities,
+      settings = vim.tbl_deep_extend("force",require'lspconfig.server_configurations.pyright'.default_config.settings, {
+        python = {
+          analysis = {
+            autoImportCompletions = false,
+            -- typeCheckingMode = "strict",
+          }
+        }
+      })
+    }
+  end,
 }
 
 
-require('lspconfig')['turtle_ls'].setup{
+lspconfig['turtle_ls'].setup{
   on_attach = on_attach,
   flags = lsp_flags,
   capabilities = capabilities,
