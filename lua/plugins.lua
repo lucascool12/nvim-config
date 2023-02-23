@@ -116,6 +116,8 @@ require('packer').startup(function(use)
         -- your configuration comes here
         -- or leave it empty to use the default settings
         -- refer to the configuration section below
+        override_del = true,
+        cut_key = "m"
       })
     end
   }
