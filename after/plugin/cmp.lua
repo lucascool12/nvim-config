@@ -1,6 +1,7 @@
 local cmp = require'cmp'
 local cmp_comp = require'cmp.config.compare'
 local packer_root = require'packer'.config.package_root
+local wmanager = require'ui.wmanager'
 require("luasnip.loaders.from_vscode").lazy_load()
 -- require'luasnip'.
 local t = function(str)
@@ -12,7 +13,15 @@ local hasMove = false
 cmp.event:on("menu_closed",
 function ()
   hasMove = false
+  wmanager.remove_window("cmp")
 end)
+
+cmp.event:on("menu_opened",
+function (tab)
+  local window = tab.window.entries_win.win
+  wmanager.add_window(window , "cmp", 99)
+end)
+
 local function confirm_with_and_wo_preselect(fallback)
   if not cmp.confirm({ select = hasMove }) then
     fallback()
@@ -67,8 +76,8 @@ cmp.setup({
     end,
   },
   window = {
-    completion = cmp.config.window.bordered(border ""),
-    documentation = cmp.config.window.bordered(border ""),
+    completion = cmp.config.window.bordered{ border "" },
+    documentation = cmp.config.window.bordered{ border "" },
   },
   mapping = cmp.mapping.preset.insert({
     ["<Tab>"] = cmp.mapping(reg_move(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }), {'i'})),

@@ -6,4 +6,3 @@ nnoremap <C-Y> <C-R>
 inoremap <C-Z> <C-O>u
 inoremap <C-Y> <C-O><C-R>
 ]])
-vim.keymap.set({"n", "i"}, "<C-s>", vim.lsp.buf.signature_help)
