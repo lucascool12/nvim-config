@@ -1,7 +1,6 @@
 local cmp = require'cmp'
 local cmp_comp = require'cmp.config.compare'
 local packer_root = require'packer'.config.package_root
-local wmanager = require'ui.wmanager'
 require("luasnip.loaders.from_vscode").lazy_load()
 -- require'luasnip'.
 local t = function(str)
@@ -13,13 +12,11 @@ local hasMove = false
 cmp.event:on("menu_closed",
 function ()
   hasMove = false
-  wmanager.remove_window("cmp")
 end)
 
 cmp.event:on("menu_opened",
 function (tab)
   local window = tab.window.entries_win.win
-  wmanager.add_window(window , "cmp", 99)
 end)
 
 local function confirm_with_and_wo_preselect(fallback)
