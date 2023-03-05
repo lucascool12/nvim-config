@@ -118,14 +118,14 @@ local c = {
       return fmt("פּ %s ", vim.bo.filetype)
     end,
     hl = "FlnAlt",
-    left_sep = { str = " ", hl = "FlnAltSep" },
-    right_sep = { str = "", hl = "FlnAltSep" },
+    left_sep = { str = u.icons.slant_right_2, hl = "FlnAltSep" },
+    right_sep = { str = u.icons.slant_left_2, hl = "FlnAltSep" },
   },
   fileinfo = {
     provider = { name = "file_info", opts = { type = "relative" } },
     hl = "FlnAlt",
-    left_sep = { str = " ", hl = "FlnAltSep" },
-    right_sep = { str = " ", hl = "FlnAltSep" },
+    left_sep = { str = u.icons.slant_right_2, hl = "FlnAltSep" },
+    right_sep = { str = u.icons.slant_left_2 , hl = "FlnAltSep" },
   },
   file_enc = {
     provider = function()
@@ -137,8 +137,15 @@ local c = {
   },
   cur_position = {
     provider = function()
-      -- TODO: What about 4+ diget line numbers?
-      return fmt(" %3d:%-2d ", unpack(vim.api.nvim_win_get_cursor(0)))
+      local numbers = vim.api.nvim_win_get_cursor(0)
+      if not numbers[1] then
+	      return ""
+      end
+      local amount = 3
+      if numbers[1] > 999 then
+        amount = math.floor(math.log10(numbers[1]))
+      end
+      return fmt(" %" .. tostring(amount) .."d:%-2d ", unpack(numbers))
     end,
     hl = vi_mode_hl,
     left_sep = { str = u.icons.left_filled, hl = vi_sep_hl },
