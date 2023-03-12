@@ -22,6 +22,11 @@ null_ls.setup{
     -- ),
     null_ls.builtins.diagnostics.mypy.with({
       method = method.internal.DIAGNOSTICS_ON_SAVE,
+      extra_args = function ()
+        return {
+          "--python-executable", vim.env.VIRTUAL_ENV .. "/bin/python",
+        }
+      end
     }),
   },
 }
