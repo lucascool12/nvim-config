@@ -1,5 +1,5 @@
 local fn = vim.fn
-local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+local install_path = fn.stdpath('data')..'/site/pack/packer/start/indentLine'
 if fn.empty(fn.glob(install_path)) > 0 then
   return
 end
