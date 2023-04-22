@@ -20,3 +20,6 @@ vim.cmd([[
 syntax on
 filetype indent on
 ]])
+vim.cmd([[
+au BufNewFile,BufRead *.idp set filetype=idp
+]])
