@@ -23,6 +23,7 @@ require('packer').startup(function(use)
   use "folke/neodev.nvim"
   use 'goerz/jupytext.vim'
   use "nvim-lua/plenary.nvim"
+  use 'mfussenegger/nvim-dap'
   use {
     'jose-elias-alvarez/null-ls.nvim',
     requires = { "nvim-lua/plenary.nvim" },
