@@ -1,5 +1,9 @@
 require('plugins')
 require'main'
+local path = require'plenary.path'
+local win32yank_path = path.new("~/.local/bin/win32yank.exe")
+win32yank_path:expand()
+
 vim.cmd([[
   augroup packer_user_config
     autocmd!
@@ -23,3 +27,9 @@ filetype indent on
 vim.cmd([[
 au BufNewFile,BufRead *.idp set filetype=idp
 ]])
+
+if win32yank_path:exists() then
+  vim.cmd([[
+  set clipboard+=unnamed
+  ]])
+end
