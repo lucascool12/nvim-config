@@ -1,5 +1,4 @@
 local M = {}
-require("mason").setup()
 local mason_reg = require'mason-registry'
 local dap = require'dap'
 

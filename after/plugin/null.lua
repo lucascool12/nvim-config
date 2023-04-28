@@ -1,6 +1,8 @@
 local null_ls = require'null-ls'
 local method = require'null-ls.methods'
 local flake8_config = { '--max-line-length', '120' }
+local helpers = require'null-ls.helpers'
+
 null_ls.setup{
   sources = {
     null_ls.builtins.code_actions.gitsigns.with{
@@ -23,10 +25,31 @@ null_ls.setup{
     null_ls.builtins.diagnostics.mypy.with({
       method = method.internal.DIAGNOSTICS_ON_SAVE,
       extra_args = function ()
-        return {
-          "--python-executable", vim.env.VIRTUAL_ENV .. "/bin/python",
-        }
+        if vim.env.VIRTUAL_ENV then
+          return {
+            "--python-executable", vim.env.VIRTUAL_ENV .. "/bin/python",
+          }
+        else
+          return {}
+        end
       end
     }),
   },
 }
+
+if vim.fn.executable('folint') == 1 then
+  local folint = {
+    method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
+    filetypes = { "idp" },
+    generator = helpers.generator_factory{
+      args = { "$FILENAME" },
+      command = "folint",
+      format = "line",
+      on_output = helpers.diagnostics.from_pattern(
+        [[((%u)%w+): line (%d+) -- colStart (%d+) -- colEnd (%d+) => (.*)]],
+        {"code", "severity", "row", "col", "col_end", "message"}
+      )
+    },
+  }
+  null_ls.register(folint)
+end
