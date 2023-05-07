@@ -1,29 +1,16 @@
-local fn = vim.fn
-local install_path = fn.stdpath('data')..'/site/pack/packer/start/indentLine'
-if fn.empty(fn.glob(install_path)) > 0 then
-  return
+local c = require'ui.colors'
+local colors = c.stline_colors_from_theme()
+local sbg = vim.o.background == "dark" and c.white or c.black
+local highlights = {
+  IndentBlanklineChar = { fg = sbg }
+}
+
+for group, color in pairs(highlights) do
+  vim.api.nvim_set_hl(0, group, color)
 end
 
-function contains(list, x)
-	for _, v in pairs(list) do
-		if v == x then return true end
-	end
-	return false
-end
-
-function Set (list)
-  local set = {}
-  for _, l in ipairs(list) do set[l] = true end
-  return set
-end
-vim.g.indentLine_enabled = 0
-vim.api.nvim_create_autocmd({"BufWinEnter"},{
-  callback = function (ev)
-    if contains({"toggleterm"}, vim.api.nvim_buf_get_option(ev.buf, "filetype")) then
-      return
-    end
-    if vim.api.nvim_buf_get_option(ev.buf, "buftype") == "" then
-      vim.cmd("IndentLinesEnable")
-    end
-  end,
-})
+require("indent_blankline").setup {
+  -- for example, context is off by default, use this to turn it on
+  -- show_current_context = true,
+  -- show_current_context_start = true,
+}
