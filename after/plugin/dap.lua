@@ -7,7 +7,7 @@ dap_fncs.set_adapters({
   },
   debugpy = {
     type = 'executable',
-    command = 'debugpy',
+    command = 'debugpy-adapter',
   }
 }, daps)
 

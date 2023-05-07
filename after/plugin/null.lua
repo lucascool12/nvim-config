@@ -39,6 +39,7 @@ null_ls.setup{
 
 if vim.fn.executable('folint') == 1 then
   local folint = {
+    name = "FOlint",
     method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
     filetypes = { "idp" },
     generator = helpers.generator_factory{

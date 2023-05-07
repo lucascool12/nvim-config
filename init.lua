@@ -24,9 +24,14 @@ vim.cmd([[
 syntax on
 filetype indent on
 ]])
-vim.cmd([[
-au BufNewFile,BufRead *.idp set filetype=idp
-]])
+
+vim.api.nvim_create_autocmd(
+  { "BufNewFile", "BufRead" },
+  {
+    pattern = { "*.idp" },
+    command = [[set filetype=idp]],
+  }
+)
 
 if win32yank_path:exists() then
   vim.cmd([[
