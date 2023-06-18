@@ -66,7 +66,7 @@ cmp.setup({
   completion = {
     completeopt = "menu,menuone,noselect,noinsert",
   },
-  preselect = require'cmp.types'.cmp.PreselectMode.Item,
+  preselect = require'cmp.types'.cmp.PreselectMode.None,
   snippet = {
     expand = function(args)
       require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
