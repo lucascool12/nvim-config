@@ -1,4 +1,5 @@
 local tree_exec = require'neo-tree.command'.execute
+local window_picker = require'window-picker'
 
 local width = 30
 local function is_file(node)
@@ -45,8 +46,8 @@ require'neo-tree'.setup{
     hijack_netrw_behavior = "open_default",
     window = {
       mappings = {
-        ['<cr>'] = "open_with_window_picker_unless",
-        ['<2-leftmouse>'] = "open_with_window_picker_unless",
+        ['<cr>'] = "open_with_window_picker",
+        ['<2-leftmouse>'] = "open_with_window_picker",
         ['S'] = "split_with_window_picker",
         ['s'] = "vsplit_with_window_picker",
         ['y'] = "yank_file_name",
@@ -54,15 +55,6 @@ require'neo-tree'.setup{
       },
     },
     commands = {
-      open_with_window_picker_unless = function(state)
-        local next = next
-        local pot_windows = require'window-picker'.filter_windows()
-        if next(pot_windows) == nil then
-          require'neo-tree.sources.filesystem.commands'.open(state)
-        else
-          require'neo-tree.sources.filesystem.commands'.open_with_window_picker(state)
-        end
-      end,
       yank_file_name = function(state)
         local node = state.tree:get_node()
         if not is_file(node) then
