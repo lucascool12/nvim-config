@@ -14,6 +14,16 @@ local packer_bootstrap = ensure_packer()
 
 require('packer').startup(function(use)
   use 'lukas-reineke/indent-blankline.nvim'
+  use 'ggandor/leap.nvim'
+  use {
+    "kylechui/nvim-surround",
+    tag = "*", -- Use for stability; omit to use `main` branch for the latest features
+    config = function()
+      require("nvim-surround").setup({
+        -- Configuration here, or leave empty to use defaults
+      })
+    end
+  }
   use 'olimorris/onedarkpro.nvim'
   use 'j-hui/fidget.nvim'
   -- use 'nvim-lua/lsp-status.nvim'
