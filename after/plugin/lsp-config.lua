@@ -32,7 +32,7 @@ function lsp_keymap_attach (client, bufnr)
 	-- if there is no implement it will hide
 	-- when you use action in finder like open vsplit then you can
 	-- use <C-t> to jump back
-	keymap("n", "<C-f>", "<cmd>Lspsaga lsp_finder<CR>", { silent = true })
+	keymap("n", "<C-f>", "<cmd>Lspsaga finder<CR>", { silent = true })
   keymap("n", "K", "<cmd>Lspsaga hover_doc<CR>", { silent = true })
 	-- Code action -- \ca
 	keymap({"n","v"}, "<leader>ca", "<cmd>Lspsaga code_action<CR>", { silent = true })
