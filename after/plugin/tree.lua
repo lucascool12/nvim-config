@@ -46,10 +46,10 @@ require'neo-tree'.setup{
     hijack_netrw_behavior = "open_default",
     window = {
       mappings = {
-        ['<cr>'] = "open_with_window_picker",
-        ['<2-leftmouse>'] = "open_with_window_picker",
-        ['S'] = "split_with_window_picker",
-        ['s'] = "vsplit_with_window_picker",
+        ['<cr>'] = "open",
+        ['<2-leftmouse>'] = "open",
+        -- ['S'] = "split",
+        -- ['s'] = "vsplit",
         ['y'] = "yank_file_name",
         ['Y'] = "yank_relative_name",
       },

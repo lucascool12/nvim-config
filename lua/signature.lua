@@ -260,8 +260,6 @@ end
 local start_pos = { 0, 0}
 local function move_to_high()
   local pos = vim.api.nvim_win_get_cursor(0)
-  print(vim.inspect(start_pos))
-  print(vim.inspect(pos))
   if pos[1] <= start_pos[1] and pos[2] < start_pos[2] then
     return true
   end
