@@ -1,3 +1,6 @@
+if require'neovim-env'.nix_present() then
+  return
+end
 local dap_fncs = require'dap-utils'
 local daps = dap_fncs.get_daps()
 

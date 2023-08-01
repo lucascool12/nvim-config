@@ -1,4 +1,8 @@
 local M = {}
+local nenv = require'neovim-env'
+if nenv.nix_present() then
+  return
+end
 local mason_reg = require'mason-registry'
 local dap = require'dap'
 
