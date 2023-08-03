@@ -80,9 +80,6 @@ require('packer').startup(function(use)
     branch = "main",
     config = function()
       require("lspsaga").setup({
-        lightbulb = {
-          enable = false,
-        },
       })
     end,
     requires = { {"nvim-tree/nvim-web-devicons"} }

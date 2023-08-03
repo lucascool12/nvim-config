@@ -38,11 +38,11 @@ local function add_parser(url, name, highlight)
   end
 end
 
-add_parser(
-  "https://github.com/lucascool12/tree-sitter-xml.git",
-  "xml",
-  "https://raw.githubusercontent.com/lucascool12/tree-sitter-xml/master/queries/highlights.scm"
-)
+-- add_parser(
+--   "https://github.com/lucascool12/tree-sitter-xml.git",
+--   "xml",
+--   "https://raw.githubusercontent.com/lucascool12/tree-sitter-xml/master/queries/highlights.scm"
+-- )
 
 add_parser(
   "https://github.com/lucascool12/tree-sitter-idp.git",

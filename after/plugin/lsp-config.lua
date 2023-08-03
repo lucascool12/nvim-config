@@ -42,6 +42,7 @@ function lsp_keymap_attach (client, bufnr)
 	-- also support open/vsplit/etc operation check definition_action_keys
 	-- support tagstack C-t jump back
 	keymap("n", "<C-LeftMouse>", "<cmd>Lspsaga peek_definition<CR>", { silent = true })
+	keymap("n", "gD", "<cmd>Lspsaga goto_definition<CR>", { silent = true })
 
 	keymap("n", "<leader>lr", "<cmd>Lspsaga rename<CR>")
 end
@@ -225,15 +226,15 @@ vim.diagnostic.config({
 })
 vim.api.nvim_create_autocmd({ "CursorHold" }, {
 	callback = function()
-		if vim.lsp.buf.server_ready() then
-			local _, window_id = vim.diagnostic.open_float({
-				focusable = false,
-			})
-			if(window_id ~= nil) then
-				vim.api.nvim_win_call(window_id, function()
-					vim.api.nvim_command([[set winblend=30]])
-				end)
-			end
+		-- if vim.lsp.buf.server_ready() then
+    local _, window_id = vim.diagnostic.open_float({
+      focusable = false,
+    })
+    if(window_id ~= nil) then
+      vim.api.nvim_win_call(window_id, function()
+        vim.api.nvim_command([[set winblend=30]])
+      end)
+			-- end
 		end
 	end,
 })
