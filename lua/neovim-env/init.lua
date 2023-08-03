@@ -1,4 +1,5 @@
 local env_conf = require'neovim-env.config'
+local config_util = require'config-util'
 local M = {}
 local path = require'plenary.path'
 local profile = path:new(vim.fn.stdpath('data'), "neovim-env")
@@ -6,7 +7,14 @@ local config = path:new(vim.fn.stdpath('config'), "lua", "neovim-env", "config.n
 local nix_pkg = "neovimEnv"
 local args = { "install", "add_package" }
 
+M.nix_present = env_conf.nix_present
+M.nixos_system = env_conf.nixos_system
+
 function M.setup()
+  if not M.nix_present() then
+    require'mason-lspconfig'.setup()
+    return
+  end
   vim.env.PATH = string.format("%s:%s", profile:joinpath("bin"), vim.env.PATH)
   vim.api.nvim_create_user_command("NeovimEnv",
     function (opts)
@@ -48,7 +56,51 @@ function M.setup()
   )
 end
 
-M.nix_present = env_conf.nix_present
-M.nixos_system = env_conf.nixos_system
+function M.lsp_handlers(configs)
+  if not M.nix_present() then
+    local mason_lsp = {}
+    for lsp, conf in pairs(configs) do
+      if type(lsp) ~= "string" then
+        mason_lsp[lsp] = function (server_name)
+          require'lspconfig'[server_name].setup(conf)
+        end
+      else
+        mason_lsp[lsp] = function ()
+          require'lspconfig'[lsp].setup(conf[1])
+        end
+      end
+    end
+    require'mason-lspconfig'.setup_handlers(mason_lsp)
+    return
+  end
+  local cmd_to_server = require'neovim-env.cmd_to_server'
+  local inited = {}
+  for lsp, conf in pairs(configs) do
+    if type(lsp) ~= 'string' then
+      goto continue
+    end
+    if conf.cmd ~= nil then
+      cmd_to_server[lsp] = conf.cmd
+    end
+    if conf.always then
+      require'lspconfig'[lsp].setup(conf)
+      inited[lsp] = true
+    end
+      ::continue::
+  end
+  local cmds = config_util.ls(tostring(profile:joinpath("bin")))
+  for _, cmd in pairs(cmds) do
+    local lsp = cmd_to_server[cmd]
+    if inited[lsp] or lsp == nil then
+      goto continue
+    end
+    if configs[lsp] ~= nil then
+      require'lspconfig'[lsp].setup(configs[lsp][1])
+    else
+      require'lspconfig'[lsp].setup(configs[1])
+    end
+      ::continue::
+  end
+end
 
 return M

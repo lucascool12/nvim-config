@@ -1,7 +1,5 @@
 require'neodev'.setup()
-if not require'neovim-env'.nix_present() then
-  require'mason-lspconfig'.setup()
-end
+local nenv = require'neovim-env'
 
 local keymap = vim.keymap.set
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
@@ -59,106 +57,165 @@ local lsp_flags = {
   debounce_text_changes = 150,
 }
 
-local function mason_ensure_installed(servers)
-  local mason_reg = require'mason-registry'
-  for _, server in ipairs(servers) do
-    if not mason_reg.is_installed(server) then
-      vim.cmd("MasonInstall " .. server)
-    end
-  end
-end
+require'neovim-env'.setup()
 
-if not require'neovim-env'.nix_present() then
-  
-  local ensure_installed = {'lua-language-server', 'rust-analyzer', 'pyright'}
-  mason_ensure_installed(ensure_installed)
-  require("mason-lspconfig").setup_handlers {
-    -- The first entry (without a key) will be the default handler
-    -- and will be called for each installed server that doesn't have
-    -- a dedicated handler.
-    function (server_name) -- default handler (optional)
-      require("lspconfig")[server_name].setup {
-        on_attach = on_attach,
-        flags = lsp_flags,
-        capabilities = capabilities,
-      }
-    end,
-  }
-else
-  require'neovim-env'.setup()
-end
-
-lspconfig['pylsp'].setup{
-  on_attach = on_attach,
-  flags = lsp_flags,
-  capabilities = capabilities,
-  -- Server-specific settings...
-  settings = {
-    pylsp = {
-      plugins = {
-        pycodestyle = {
-          maxLineLength = 120,
+nenv.lsp_handlers{
+  {
+    on_attach = on_attach,
+    flags = lsp_flags,
+    capabilities = capabilities,
+  },
+  ['pylsp'] = {
+    {
+      on_attach = on_attach,
+      flags = lsp_flags,
+      capabilities = capabilities,
+      -- Server-specific settings...
+      settings = {
+        pylsp = {
+          plugins = {
+            pycodestyle = {
+              maxLineLength = 120,
+            }
+          }
         }
       }
-    }
-  }
-}
-
-lspconfig['pyright'].setup{
-  on_attach = on_attach,
-  flags = lsp_flags,
-  capabilities = capabilities,
-  settings = vim.tbl_deep_extend("force",require'lspconfig.server_configurations.pyright'.default_config.settings, {
-    python = {
-      analysis = {
-        autoImportCompletions = false,
-        -- typeCheckingMode = "strict",
-      }
-    }
-  })
-}
-
-lspconfig['lua_ls'].setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  flags = lsp_flags,
-  settings = {
-    Lua = {
-      runtime = {
-        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-        version = 'LuaJIT',
-      },
-      diagnostics = {
-        -- Get the language server to recognize the `vim` global
-        globals = {'vim'},
-      },
-      workspace = {
-        -- Make the server aware of Neovim runtime files
-        library = table.insert(vim.api.nvim_get_runtime_file("", true), { vim.fs.normalize(vim.fn.stdpath("config") .. "/lua")}),
-      },
-      -- Do not send telemetry data containing a randomized but unique identifier
-      telemetry = {
-        enable = false,
+    },
+  },
+  ['pyright'] = {
+    {
+      on_attach = on_attach,
+      flags = lsp_flags,
+      capabilities = capabilities,
+      settings = vim.tbl_deep_extend("force",require'lspconfig.server_configurations.pyright'.default_config.settings, {
+        python = {
+          analysis = {
+            autoImportCompletions = false,
+            -- typeCheckingMode = "strict",
+          }
+        }
+      })
+    },
+  },
+  ['lua-ls'] = {
+    {
+      on_attach = on_attach,
+      capabilities = capabilities,
+      flags = lsp_flags,
+      settings = {
+        Lua = {
+          runtime = {
+            -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+            version = 'LuaJIT',
+          },
+          diagnostics = {
+            -- Get the language server to recognize the `vim` global
+            globals = {'vim'},
+          },
+          workspace = {
+            -- Make the server aware of Neovim runtime files
+            library = table.insert(vim.api.nvim_get_runtime_file("", true), { vim.fs.normalize(vim.fn.stdpath("config") .. "/lua")}),
+          },
+          -- Do not send telemetry data containing a randomized but unique identifier
+          telemetry = {
+            enable = false,
+          },
+        },
       },
     },
   },
+  ['rust-analyzer'] = {
+    {
+      on_attach = on_attach,
+      flags = lsp_flags,
+      capabilities = capabilities,
+      -- Server-specific settings...
+      settings = {
+        ["rust-analyzer"] = {}
+      }
+    },
+  },
+  ['turtle_ls'] = {
+    {
+      on_attach = on_attach,
+      flags = lsp_flags,
+      capabilities = capabilities,
+    },
+    always = true,
+  },
 }
 
-lspconfig['rust_analyzer'].setup{
-  on_attach = on_attach,
-  flags = lsp_flags,
-  capabilities = capabilities,
-  -- Server-specific settings...
-  settings = {
-    ["rust-analyzer"] = {}
-  }
-}
-
-lspconfig['turtle_ls'].setup{
-  on_attach = on_attach,
-  flags = lsp_flags,
-  capabilities = capabilities,
-}
+-- lspconfig['pylsp'].setup{
+--   on_attach = on_attach,
+--   flags = lsp_flags,
+--   capabilities = capabilities,
+--   -- Server-specific settings...
+--   settings = {
+--     pylsp = {
+--       plugins = {
+--         pycodestyle = {
+--           maxLineLength = 120,
+--         }
+--       }
+--     }
+--   }
+-- }
+--
+-- lspconfig['pyright'].setup{
+--   on_attach = on_attach,
+--   flags = lsp_flags,
+--   capabilities = capabilities,
+--   settings = vim.tbl_deep_extend("force",require'lspconfig.server_configurations.pyright'.default_config.settings, {
+--     python = {
+--       analysis = {
+--         autoImportCompletions = false,
+--         -- typeCheckingMode = "strict",
+--       }
+--     }
+--   })
+-- }
+--
+-- lspconfig['lua_ls'].setup {
+--   on_attach = on_attach,
+--   capabilities = capabilities,
+--   flags = lsp_flags,
+--   settings = {
+--     Lua = {
+--       runtime = {
+--         -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+--         version = 'LuaJIT',
+--       },
+--       diagnostics = {
+--         -- Get the language server to recognize the `vim` global
+--         globals = {'vim'},
+--       },
+--       workspace = {
+--         -- Make the server aware of Neovim runtime files
+--         library = table.insert(vim.api.nvim_get_runtime_file("", true), { vim.fs.normalize(vim.fn.stdpath("config") .. "/lua")}),
+--       },
+--       -- Do not send telemetry data containing a randomized but unique identifier
+--       telemetry = {
+--         enable = false,
+--       },
+--     },
+--   },
+-- }
+--
+-- lspconfig['rust_analyzer'].setup{
+--   on_attach = on_attach,
+--   flags = lsp_flags,
+--   capabilities = capabilities,
+--   -- Server-specific settings...
+--   settings = {
+--     ["rust-analyzer"] = {}
+--   }
+-- }
+--
+-- lspconfig['turtle_ls'].setup{
+--   on_attach = on_attach,
+--   flags = lsp_flags,
+--   capabilities = capabilities,
+-- }
 
 
 -- cursor hover on error, faster updatetime
