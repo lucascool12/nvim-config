@@ -104,7 +104,6 @@ function M.add_package(buf, pack)
     for id, node in pairs(match) do
       if query.captures[id] == "package" then
         table.insert(nodes, node)
-        print(vim.treesitter.get_node_text(node, parser:source()))
       elseif query.captures[id] == "list" then
         list = node
       end

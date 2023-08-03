@@ -42,7 +42,6 @@ local function nix_lsp_setup_diff()
     inited[lsp] = true
       ::continue::
   end
-  print(vim.inspect(inited))
 end
 
 function M.setup()
