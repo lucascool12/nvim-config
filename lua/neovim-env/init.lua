@@ -96,16 +96,21 @@ end
 function M.lsp_handlers(configs)
   if not M.nix_present() then
     local mason_lsp = {}
+    local default_conf
+    local confs = {}
     for lsp, conf in pairs(configs) do
-      if type(lsp) ~= "string" then
-        mason_lsp[lsp] = function (server_name)
-          require'lspconfig'[server_name].setup(conf)
-        end
+      if lsp == 1 then
+        default_conf = conf
       else
-        mason_lsp[lsp] = function ()
-          require'lspconfig'[lsp].setup(conf[1])
-        end
+        confs[lsp] = true
+        require'lspconfig'[lsp].setup(conf[1])
       end
+    end
+    mason_lsp[1] = function (server_name)
+      if confs[server_name] then
+        return
+      end
+      require'lspconfig'[server_name].setup(default_conf)
     end
     require'mason-lspconfig'.setup_handlers(mason_lsp)
     return

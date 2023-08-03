@@ -98,7 +98,7 @@ nenv.lsp_handlers{
       })
     },
   },
-  ['lua-ls'] = {
+  ['lua_ls'] = {
     {
       on_attach = on_attach,
       capabilities = capabilities,
@@ -125,7 +125,7 @@ nenv.lsp_handlers{
       },
     },
   },
-  ['rust-analyzer'] = {
+  ['rust_analyzer'] = {
     {
       on_attach = on_attach,
       flags = lsp_flags,
