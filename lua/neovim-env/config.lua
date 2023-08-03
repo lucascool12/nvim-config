@@ -48,14 +48,15 @@ local query = vim.treesitter.query.parse('nix', [[
 local M = {}
 
 function M.nix_present()
-  return vim.fn.executable("nix")
+  return vim.fn.executable("nix") == 1
 end
 
 function M.nixos_system()
-  return vim.fn.executable("nixos-version")
+  return vim.fn.executable("nixos-version") == 1
 end
 
-function M.install_config(config, profile, package_name)
+--- @param on_succes? function
+function M.install_config(config, profile, package_name, on_succes)
   if type(config) == "string" then
     config = path:new(config)
   end
@@ -63,7 +64,7 @@ function M.install_config(config, profile, package_name)
     profile = path:new(profile)
   end
   local pkgs = "nixpkgs"
-  if M.nixos_system then
+  if M.nixos_system() then
     pkgs = "nixos"
   end
   vim.defer_fn(function ()
@@ -79,6 +80,13 @@ function M.install_config(config, profile, package_name)
       end,
       on_stderr = function(error, data, _)
         print(data)
+      end,
+      on_exit = function(code, sig)
+        if code.code == 0 then
+          if on_succes ~= nil then
+            on_succes()
+          end
+        end
       end,
     }:start()
   end, 0)

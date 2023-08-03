@@ -10,6 +10,41 @@ local args = { "install", "add_package" }
 M.nix_present = env_conf.nix_present
 M.nixos_system = env_conf.nixos_system
 
+local lsp_config
+local inited = {}
+
+local function nix_lsp_setup_diff()
+  local cmd_to_server = require'neovim-env.cmd_to_server'
+  for lsp, conf in pairs(lsp_config) do
+    if type(lsp) ~= 'string' then
+      goto continue
+    end
+    if conf.cmd ~= nil then
+      cmd_to_server[lsp] = conf.cmd
+    end
+    if conf.always then
+      require'lspconfig'[lsp].setup(conf)
+      inited[lsp] = true
+    end
+      ::continue::
+  end
+  local cmds = config_util.ls(tostring(profile:joinpath("bin")))
+  for _, cmd in pairs(cmds) do
+    local lsp = cmd_to_server[cmd]
+    if inited[lsp] or lsp == nil then
+      goto continue
+    end
+    if lsp_config[lsp] ~= nil then
+      require'lspconfig'[lsp].setup(lsp_config[lsp][1])
+    else
+      require'lspconfig'[lsp].setup(lsp_config[1])
+    end
+    inited[lsp] = true
+      ::continue::
+  end
+  print(vim.inspect(inited))
+end
+
 function M.setup()
   if not M.nix_present() then
     require'mason-lspconfig'.setup()
@@ -19,7 +54,9 @@ function M.setup()
   vim.api.nvim_create_user_command("NeovimEnv",
     function (opts)
       if opts.fargs[1] == args[1] then
-        env_conf.install_config(config, profile, nix_pkg)
+        env_conf.install_config(config, profile, nix_pkg, function ()
+          vim.defer_fn(nix_lsp_setup_diff, 0)
+        end)
       elseif opts.fargs[1] == args[2] then
         if #opts.fargs < 2 then
           vim.api.nvim_err_writeln("Packages expected")
@@ -73,34 +110,8 @@ function M.lsp_handlers(configs)
     require'mason-lspconfig'.setup_handlers(mason_lsp)
     return
   end
-  local cmd_to_server = require'neovim-env.cmd_to_server'
-  local inited = {}
-  for lsp, conf in pairs(configs) do
-    if type(lsp) ~= 'string' then
-      goto continue
-    end
-    if conf.cmd ~= nil then
-      cmd_to_server[lsp] = conf.cmd
-    end
-    if conf.always then
-      require'lspconfig'[lsp].setup(conf)
-      inited[lsp] = true
-    end
-      ::continue::
-  end
-  local cmds = config_util.ls(tostring(profile:joinpath("bin")))
-  for _, cmd in pairs(cmds) do
-    local lsp = cmd_to_server[cmd]
-    if inited[lsp] or lsp == nil then
-      goto continue
-    end
-    if configs[lsp] ~= nil then
-      require'lspconfig'[lsp].setup(configs[lsp][1])
-    else
-      require'lspconfig'[lsp].setup(configs[1])
-    end
-      ::continue::
-  end
+  lsp_config = configs
+  nix_lsp_setup_diff()
 end
 
 return M
