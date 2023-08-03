@@ -14,13 +14,13 @@ vim.cmd("set signcolumn=yes")
 
 -- better line numbers
 vim.cmd([[set number]])
-vim.cmd([[
-augroup numbertoggle
-  autocmd!
-  autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif
-  autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif
-augroup END
-]])
+-- vim.cmd([[
+-- augroup numbertoggle
+--   autocmd!
+--   autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif
+--   autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif
+-- augroup END
+-- ]])
 
 -- exit with right click menu
 vim.cmd([[unmenu PopUp.How-to\ disable\ mouse]])
