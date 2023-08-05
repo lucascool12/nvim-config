@@ -1,9 +1,10 @@
 local curl = require'plenary.curl'
 local path = require'plenary.path'
-local query_path = path.new(vim.fn.stdpath('data') .. "/site/pack/packer/start/nvim-treesitter/queries/")
+local config_util = require'config-util'
+local query_path = path:new(config_util.plugin_path, "nvim-treesitter/queries/")
 
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = {"lua", "python", "rust"},
+  ensure_installed = {"lua", "python", "rust", "nix"},
   auto_install = true,
   highlight = {
     enable = true,
@@ -44,8 +45,8 @@ end
 --   "https://raw.githubusercontent.com/lucascool12/tree-sitter-xml/master/queries/highlights.scm"
 -- )
 
-add_parser(
-  "https://github.com/lucascool12/tree-sitter-idp.git",
-  "idp",
-  "https://raw.githubusercontent.com/lucascool12/tree-sitter-idp/master/queries/highlights.scm"
-)
+-- add_parser(
+--   "https://github.com/lucascool12/tree-sitter-idp.git",
+--   "idp",
+--   "https://raw.githubusercontent.com/lucascool12/tree-sitter-idp/master/queries/highlights.scm"
+-- )

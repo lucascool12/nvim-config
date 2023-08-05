@@ -26,7 +26,7 @@ local function get_python_path(workspace)
   return exepath('python3') or exepath('python') or 'python'
 end
 
-function lsp_keymap_attach (client, bufnr)
+local function lsp_keymap_attach (client, bufnr)
 	-- lsp-saga
 	-- Lsp finder find the symbol definition implement reference
 	-- if there is no implement it will hide

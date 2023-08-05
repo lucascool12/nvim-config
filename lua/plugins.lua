@@ -1,125 +1,107 @@
--- bootstrap Packer
-local ensure_packer = function()
-  local fn = vim.fn
-  local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-  if fn.empty(fn.glob(install_path)) > 0 then
-    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
-    vim.cmd [[packadd packer.nvim]]
-    return true
-  end
-  return false
-end
 
-local packer_bootstrap = ensure_packer()
-
-require('packer').startup(function(use)
-  use 'lukas-reineke/indent-blankline.nvim'
-  use 'ggandor/leap.nvim'
-  use {
+return {
+  'lukas-reineke/indent-blankline.nvim',
+  'ggandor/leap.nvim',
+  {
     "kylechui/nvim-surround",
-    tag = "*", -- Use for stability; omit to use `main` branch for the latest features
+    version = "*", -- Use for stability; omit to use `main` branch for the latest features
+    event = "VeryLazy",
     config = function()
       require("nvim-surround").setup({
         -- Configuration here, or leave empty to use defaults
       })
     end
-  }
-  use 'olimorris/onedarkpro.nvim'
-  use 'j-hui/fidget.nvim'
-  -- use 'nvim-lua/lsp-status.nvim'
-	use 'wbthomason/packer.nvim'
-	use "EdenEast/nightfox.nvim"
-  use 'milisims/nvim-luaref'
-  use "folke/neodev.nvim"
-  use 'goerz/jupytext.vim'
-  use "nvim-lua/plenary.nvim"
-  use 'mfussenegger/nvim-dap'
-  use {
+  },
+  'olimorris/onedarkpro.nvim',
+  'j-hui/fidget.nvim',
+  -- 'nvim-lua/lsp-status.nvim',
+	"EdenEast/nightfox.nvim",
+  'milisims/nvim-luaref',
+  "folke/neodev.nvim",
+  'goerz/jupytext.vim',
+  "nvim-lua/plenary.nvim",
+  'mfussenegger/nvim-dap',
+  {
     'jose-elias-alvarez/null-ls.nvim',
-    requires = { "nvim-lua/plenary.nvim" },
-  }
-  use {
+    dependencies = { "nvim-lua/plenary.nvim" },
+  },
+  {
     "nvim-neo-tree/neo-tree.nvim",
-    branch = "v2.x",
-    requires = {
+    branch = "v3.x",
+    dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
       "MunifTanjim/nui.nvim",
     }
-  }
-  use {
+  },
+  {
     "mrbjarksen/neo-tree-diagnostics.nvim",
-    requires = "nvim-neo-tree/neo-tree.nvim",
+    dependencies = "nvim-neo-tree/neo-tree.nvim",
     module = "neo-tree.sources.diagnostics", -- if wanting to lazyload
-  }
+  },
 
-  use 's1n7ax/nvim-window-picker'
+  's1n7ax/nvim-window-picker',
 
 	-- use {
 	-- 	'nvim-lualine/lualine.nvim',
-	-- 	requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+	-- 	dependencies = { 'kyazdani42/nvim-web-devicons', opt = true }
 	-- }
-  use 'feline-nvim/feline.nvim'
-	use {'romgrk/barbar.nvim', wants = 'nvim-web-devicons'}
+  'feline-nvim/feline.nvim',
+	{'romgrk/barbar.nvim', wants = 'nvim-web-devicons'},
 
-	use 'lewis6991/gitsigns.nvim'
+	'lewis6991/gitsigns.nvim',
 
-	use {
+	{
 		'stevearc/aerial.nvim',
 		config = function() require('aerial').setup() end
-  }
+  },
 
-	use {
+	{
     'numToStr/Comment.nvim',
     config = function()
       require('Comment').setup()
     end
-	}
-  use {
-    "glepnir/lspsaga.nvim",
-    branch = "main",
-    config = function()
-      require("lspsaga").setup({
-      })
-    end,
-    requires = { {"nvim-tree/nvim-web-devicons"} }
-  }
-	use {
+	},
+	{
     'nvim-treesitter/nvim-treesitter',
     run = function()
       local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
       ts_update()
     end,
-	}
-  use'nvim-treesitter/playground'
-  use {
+	},
+  'nvim-treesitter/playground',
+  {
     'akinsho/toggleterm.nvim'
-  }
-  use 'neovim/nvim-lspconfig' -- Configurations for Nvim LSP
-  use({"L3MON4D3/LuaSnip", tag = "v<CurrentMajor>.*"})
-  use 'rafamadriz/friendly-snippets'
-  use 'hrsh7th/cmp-nvim-lsp'
-  use 'hrsh7th/cmp-nvim-lua'
-  use 'hrsh7th/cmp-buffer'
-  use 'hrsh7th/cmp-path'
-  use 'hrsh7th/cmp-cmdline'
-  use 'hrsh7th/nvim-cmp'
-  use 'saadparwaiz1/cmp_luasnip'
-  use 'Vimjas/vim-python-pep8-indent'
-  use {
+  },
+  'neovim/nvim-lspconfig', -- Configurations for Nvim LSP
+  {
+    "L3MON4D3/LuaSnip",
+    version = "2.*",
+    build = "make install_jsregexp"
+  },
+  'rafamadriz/friendly-snippets',
+  'hrsh7th/cmp-nvim-lsp',
+  'hrsh7th/cmp-nvim-lua',
+  'hrsh7th/cmp-buffer',
+  'hrsh7th/cmp-path',
+  'hrsh7th/cmp-cmdline',
+  'hrsh7th/nvim-cmp',
+  'saadparwaiz1/cmp_luasnip',
+  'Vimjas/vim-python-pep8-indent',
+  {
     'nvim-telescope/telescope.nvim', tag = '0.1.0',
     -- or                            , branch = '0.1.x',
-    requires = { {'nvim-lua/plenary.nvim'} }
-  }
-  use 'BurntSushi/ripgrep'
-  use({
+    dependencies = { {'nvim-lua/plenary.nvim'} }
+  },
+  'BurntSushi/ripgrep',
+  ({
     "iamcco/markdown-preview.nvim",
     run = function() vim.fn["mkdp#util#install"]() end,
-  })
-  use 'williamboman/mason.nvim'
-  use 'williamboman/mason-lspconfig.nvim'
-  use 'windwp/nvim-ts-autotag'
-  use {
+  }),
+  'williamboman/mason.nvim',
+  'williamboman/mason-lspconfig.nvim',
+  'windwp/nvim-ts-autotag',
+  {
     "gbprod/cutlass.nvim",
     config = function()
       require("cutlass").setup({
@@ -130,9 +112,9 @@ require('packer').startup(function(use)
         cut_key = "m"
       })
     end
-  }
-  use 'gbprod/yanky.nvim'
-  use {
+  },
+  'gbprod/yanky.nvim',
+  {
     "smjonas/live-command.nvim",
     -- live-command supports semantic versioning via tags
     -- tag = "1.*",
@@ -143,12 +125,6 @@ require('packer').startup(function(use)
         },
       }
     end,
-  }
-  use {"shortcuts/no-neck-pain.nvim", tag = "*" }
-	end
-)
-
-if packer_bootstrap then
-    require('packer').sync()
-end
-
+  },
+  {"shortcuts/no-neck-pain.nvim", version = "*" },
+}

@@ -1,7 +1,7 @@
 local M = {}
 local path = require'plenary.path'
 
-M.plugin_path = tostring(path:new(require'packer'.config.package_root, "packer", "start"))
+M.plugin_path = path:new(require'lazy.core.config'.options.root)
 
 --- @param transform? function
 --- @param insert_func? function

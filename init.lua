@@ -1,15 +1,23 @@
-require('plugins')
-require'main'
+-- require'main'
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+local plugins = require'plugins'
+require'lazy'.setup(plugins)
 local path = require'plenary.path'
 local win32yank_path = path.new("~/.local/bin/win32yank.exe")
 win32yank_path:expand()
 
-vim.cmd([[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost plugins.lua source <afile> | PackerSync
-  augroup end
-]])
 vim.cmd([[set modelines=0]])
 -- set termguicolors to enable highlight groups
 vim.opt.termguicolors = true
@@ -38,3 +46,4 @@ if win32yank_path:exists() then
   set clipboard+=unnamed
   ]])
 end
+

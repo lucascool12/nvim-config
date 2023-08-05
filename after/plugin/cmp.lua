@@ -1,6 +1,5 @@
 local cmp = require'cmp'
 local cmp_comp = require'cmp.config.compare'
-local packer_root = require'packer'.config.package_root
 require("luasnip.loaders.from_vscode").lazy_load()
 -- require'luasnip'.
 local t = function(str)

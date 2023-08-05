@@ -6,6 +6,8 @@
                 (import <nixos-unstable>{}).lua-language-server
                 lazygit
                 ripgrep
+                gnumake
+                tree-sitter
             ];
         };
     };
