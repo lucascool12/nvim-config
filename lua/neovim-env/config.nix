@@ -11,6 +11,7 @@ in
                 ripgrep
                 gnumake
                 tree-sitter
+                unstable.nil
             ];
         };
     };
