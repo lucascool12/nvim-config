@@ -102,6 +102,13 @@ return {
   'williamboman/mason-lspconfig.nvim',
   'windwp/nvim-ts-autotag',
   {
+    'nvimdev/lspsaga.nvim',
+    config = function()
+      require("lspsaga").setup({
+      })
+    end,
+  },
+  {
     "gbprod/cutlass.nvim",
     config = function()
       require("cutlass").setup({
