@@ -1,3 +1,7 @@
+if true then
+  return {}
+end
+
 local null_ls = require'null-ls'
 local method = require'null-ls.methods'
 local flake8_config = { '--max-line-length', '120' }
