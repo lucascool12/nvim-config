@@ -1,6 +1,6 @@
 local path = require'plenary.path'
 local job = require'plenary.job'
-local query = vim.treesitter.query.parse('nix', [[
+local query_str = [[
 (attrset_expression
   (binding_set
     (binding
@@ -43,7 +43,8 @@ local query = vim.treesitter.query.parse('nix', [[
     )
   )
 )
-]])
+]]
+local query = vim.treesitter.query.parse('nix', query_str)
 
 local M = {}
 

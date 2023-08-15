@@ -1,4 +1,4 @@
-if require'neovim-env'.nix_present() then
+if not require'neovim-env'.mason() then
   return
 end
 local dap_fncs = require'dap-utils'
