@@ -1,5 +1,6 @@
 
 return {
+  { 'HiPhish/guile.vim', url="https://gitlab.com/HiPhish/guile.vim"},
   'lukas-reineke/indent-blankline.nvim',
   'ggandor/leap.nvim',
   {
