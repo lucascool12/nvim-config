@@ -44,7 +44,19 @@ local query_str = [[
   )
 )
 ]]
-local query = vim.treesitter.query.parse('nix', query_str)
+local _query
+
+local function get_query()
+  if not _query then
+    local res, q = pcall(vim.treesitter.query.parse, 'nix', query_str)
+    if res then
+      _query = q
+    else
+      return nil
+    end
+  end
+  return _query
+end
 
 local M = {}
 
@@ -101,6 +113,10 @@ function M.add_package(buf, pack)
 
   local nodes = {}
   local list
+  local query = get_query()
+  if query == nil then
+    error("treesitter for nix not installed")
+  end
   for pattern, match, metadata in query:iter_matches(first_node, parser:source(), 0 , 16) do
     for id, node in pairs(match) do
       if query.captures[id] == "package" then

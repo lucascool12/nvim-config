@@ -4,7 +4,7 @@ local config_util = require'config-util'
 local query_path = path:new(config_util.plugin_path, "nvim-treesitter/queries/")
 
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = {"lua", "python", "rust", "nix"},
+  ensure_installed = {"lua", "python", "rust"},
   auto_install = true,
   highlight = {
     enable = true,

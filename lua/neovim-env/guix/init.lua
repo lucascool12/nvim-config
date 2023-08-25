@@ -148,19 +148,22 @@ function M.setup(profile)
         for key, val in pairs(args) do
           args[key] = vim.fs.normalize(val)
         end
+        print(vim.inspect(args))
         job:new{
           command = "guix",
           args = args,
           env = env,
           enable_handlers = true,
-          on_stdout = function(error, data, _)
+          on_stdout = function(_, data, _)
             print(data)
           end,
-          on_stderr = function(error, data, _)
+          on_stderr = function(_, data, _)
             print(data)
           end,
-          on_exit = function(code, sig)
+          on_exit = function(code, _)
             if code.code == 0 then
+              vim.defer_fn(require'neovim-env'.setup_new_lsps, 0)
+              print("here")
             end
           end,
         }:start()

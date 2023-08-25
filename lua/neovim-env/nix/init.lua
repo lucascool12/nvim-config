@@ -15,7 +15,7 @@ function M.setup(profile)
     function (opts)
       if opts.fargs[1] == args[1] then
         env_conf.install_config(config, profile, nix_pkg, function ()
-          vim.defer_fn(nix_lsp_setup_diff, 0)
+          vim.defer_fn(require'neovim-env'.setup_new_lsps, 0)
         end)
       elseif opts.fargs[1] == args[2] then
         if #opts.fargs < 2 then

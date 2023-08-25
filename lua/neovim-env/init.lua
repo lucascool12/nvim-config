@@ -12,7 +12,7 @@ end
 local lsp_config
 local inited = {}
 
-local function nix_lsp_setup_diff()
+function M.setup_new_lsps()
   local cmd_to_server = require'neovim-env.cmd_to_server'
   for lsp, conf in pairs(lsp_config) do
     if type(lsp) ~= 'string' then
@@ -75,7 +75,7 @@ function M.lsp_handlers(configs)
     return
   end
   lsp_config = configs
-  nix_lsp_setup_diff()
+  M.setup_new_lsps()
 end
 
 return M
