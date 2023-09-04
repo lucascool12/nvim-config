@@ -15,45 +15,45 @@ return {
   },
   'olimorris/onedarkpro.nvim',
   'j-hui/fidget.nvim',
-  -- 'nvim-lua/lsp-status.nvim',
 	"EdenEast/nightfox.nvim",
   'milisims/nvim-luaref',
   "folke/neodev.nvim",
-  'goerz/jupytext.vim',
+  { 'goerz/jupytext.vim', event = "VeryLazy" },
   "nvim-lua/plenary.nvim",
-  'mfussenegger/nvim-dap',
+  { 'mfussenegger/nvim-dap', event = "VeryLazy" },
   {
     'jose-elias-alvarez/null-ls.nvim',
     dependencies = { "nvim-lua/plenary.nvim" },
   },
-  {
-    "nvim-neo-tree/neo-tree.nvim",
-    branch = "v3.x",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
-      "MunifTanjim/nui.nvim",
-    }
-  },
-  {
-    "mrbjarksen/neo-tree-diagnostics.nvim",
-    dependencies = "nvim-neo-tree/neo-tree.nvim",
-    module = "neo-tree.sources.diagnostics", -- if wanting to lazyload
-  },
+  -- {
+  --   "nvim-neo-tree/neo-tree.nvim",
+  --   branch = "v3.x",
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --     "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+  --     "MunifTanjim/nui.nvim",
+  --   }
+  -- },
+  -- {
+  --   "mrbjarksen/neo-tree-diagnostics.nvim",
+  --   dependencies = "nvim-neo-tree/neo-tree.nvim",
+  --   module = "neo-tree.sources.diagnostics", -- if wanting to lazyload
+  -- },
 
-  's1n7ax/nvim-window-picker',
+  -- 's1n7ax/nvim-window-picker',
 
 	-- use {
 	-- 	'nvim-lualine/lualine.nvim',
 	-- 	dependencies = { 'kyazdani42/nvim-web-devicons', opt = true }
 	-- }
   'feline-nvim/feline.nvim',
-	{'romgrk/barbar.nvim', wants = 'nvim-web-devicons'},
+	{'romgrk/barbar.nvim', dependencies = { 'nvim-tree/nvim-web-devicons' }},
 
 	'lewis6991/gitsigns.nvim',
 
 	{
 		'stevearc/aerial.nvim',
+    event = "VeryLazy",
 		config = function() require('aerial').setup() end
   },
 
@@ -92,23 +92,20 @@ return {
   {
     'nvim-telescope/telescope.nvim', tag = '0.1.0',
     -- or                            , branch = '0.1.x',
-    dependencies = { {'nvim-lua/plenary.nvim'} }
+    dependencies = {
+      {'nvim-lua/plenary.nvim'},
+      "debugloop/telescope-undo.nvim",
+  }
   },
   'BurntSushi/ripgrep',
   ({
     "iamcco/markdown-preview.nvim",
+    event = "VeryLazy",
     run = function() vim.fn["mkdp#util#install"]() end,
   }),
-  'williamboman/mason.nvim',
-  'williamboman/mason-lspconfig.nvim',
-  'windwp/nvim-ts-autotag',
-  {
-    'nvimdev/lspsaga.nvim',
-    config = function()
-      require("lspsaga").setup({
-      })
-    end,
-  },
+  { 'williamboman/mason.nvim', event = "VeryLazy" },
+  { 'williamboman/mason-lspconfig.nvim', event = "VeryLazy" },
+  { 'windwp/nvim-ts-autotag', event = "VeryLazy" },
   {
     "gbprod/cutlass.nvim",
     config = function()
@@ -134,5 +131,4 @@ return {
       }
     end,
   },
-  {"shortcuts/no-neck-pain.nvim", version = "*" },
 }

@@ -8,49 +8,20 @@ local util = require('lspconfig/util')
 local lspconfig = require'lspconfig'
 local path = util.path
 
-local function get_python_path(workspace)
-  -- Use activated virtualenv.
-  if vim.env.VIRTUAL_ENV then
-    return path.join(vim.env.VIRTUAL_ENV, 'bin', 'python')
-  end
-
-  -- Find and use virtualenv in workspace directory.
-  for _, pattern in ipairs({'*', '.*'}) do
-    local match = vim.fn.glob(path.join(workspace, pattern, 'pyvenv.cfg'))
-    if match ~= '' then
-      return path.join(path.dirname(match), 'bin', 'python')
-    end
-  end
-
-  -- Fallback to system Python.
-  return exepath('python3') or exepath('python') or 'python'
-end
-
 local function lsp_keymap_attach (client, bufnr)
-	-- lsp-saga
-	-- Lsp finder find the symbol definition implement reference
-	-- if there is no implement it will hide
-	-- when you use action in finder like open vsplit then you can
-	-- use <C-t> to jump back
-	keymap("n", "<C-f>", "<cmd>Lspsaga finder<CR>", { silent = true })
-  keymap("n", "K", "<cmd>Lspsaga hover_doc<CR>", { silent = true })
-	-- Code action -- \ca
-	keymap({"n","v"}, "<leader>ca", "<cmd>Lspsaga code_action<CR>", { silent = true })
+	keymap("n", "<C-f>", vim.lsp.buf.references, { silent = true })
+  keymap("n", "K", vim.lsp.buf.hover, { silent = true })
+	keymap({"n","v"}, "<leader>ca", vim.lsp.buf.code_action, { silent = true })
 
-	-- Peek Definition
-	-- you can edit the definition file in this flaotwindow
-	-- also support open/vsplit/etc operation check definition_action_keys
-	-- support tagstack C-t jump back
-	keymap("n", "<C-LeftMouse>", "<cmd>Lspsaga peek_definition<CR>", { silent = true })
-	keymap("n", "gD", "<cmd>Lspsaga goto_definition<CR>", { silent = true })
+	keymap("n", "<C-LeftMouse>", vim.lsp.buf.definition, { silent = true })
+	keymap("n", "gD", vim.lsp.buf.definition, { silent = true })
 
-	keymap("n", "<leader>lr", "<cmd>Lspsaga rename<CR>")
+	keymap("n", "<leader>lr", vim.lsp.buf.rename)
 end
 
 local on_attach = function(client, bufnr)
   lsp_keymap_attach(client, bufnr)
   require'signature'.setup(client)
-  -- require'lsp-status'.on_attach(client, bufnr)
 end
 
 local lsp_flags = {
