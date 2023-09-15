@@ -31,7 +31,7 @@ local escapes = {
   ["\\v"] = "\v",
 }
 
-function escape_any(sub_str)
+local function escape_any(sub_str)
   if sub_str:sub(1, 1) == '\\' then
     return ""
   end
@@ -163,7 +163,6 @@ function M.setup(profile)
           on_exit = function(code, _)
             if code.code == 0 then
               vim.defer_fn(require'neovim-env'.setup_new_lsps, 0)
-              print("here")
             end
           end,
         }:start()
