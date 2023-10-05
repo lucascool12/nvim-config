@@ -1,5 +1,6 @@
 
 return {
+  'lervag/vimtex',
   { 'HiPhish/guile.vim', url='https://gitlab.com/HiPhish/guile.vim'},
   'lukas-reineke/indent-blankline.nvim',
   'ggandor/leap.nvim',
@@ -25,29 +26,7 @@ return {
     'jose-elias-alvarez/null-ls.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
   },
-  -- {
-  --   'nvim-neo-tree/neo-tree.nvim',
-  --   branch = 'v3.x',
-  --   dependencies = {
-  --     'nvim-lua/plenary.nvim',
-  --     'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
-  --     'MunifTanjim/nui.nvim',
-  --   }
-  -- },
-  -- {
-  --   'mrbjarksen/neo-tree-diagnostics.nvim',
-  --   dependencies = 'nvim-neo-tree/neo-tree.nvim',
-  --   module = 'neo-tree.sources.diagnostics', -- if wanting to lazyload
-  -- },
-
-  -- 's1n7ax/nvim-window-picker',
-
-	-- use {
-	-- 	'nvim-lualine/lualine.nvim',
-	-- 	dependencies = { 'kyazdani42/nvim-web-devicons', opt = true }
-	-- }
 	{ 'feline-nvim/feline.nvim', dependencies = { 'nvim-tree/nvim-web-devicons' }},
-	-- {'romgrk/barbar.nvim', dependencies = { 'nvim-tree/nvim-web-devicons' }},
 
 	'lewis6991/gitsigns.nvim',
 
