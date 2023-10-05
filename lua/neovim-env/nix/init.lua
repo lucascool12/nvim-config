@@ -1,16 +1,18 @@
 local path = require'plenary.path'
 local env_conf = require'neovim-env.nix.config'
 local config = path:new(vim.fn.stdpath('config'), "lua", "neovim-env", "nix", "config.nix")
+local args = { "install", "add_package" }
 local nix_pkg = "neovimEnv"
 
 local M = {}
 
-M.present = env_conf.nix_present()
+M.present = env_conf.nix_present
 
 function M.setup(profile)
   vim.env.PATH = string.format("%s:%s", profile:joinpath("bin"), vim.env.PATH)
   if type(profile) == "string" then
     profile = path:new(profile)
+  end
   vim.api.nvim_create_user_command("NeovimEnv",
     function (opts)
       if opts.fargs[1] == args[1] then
@@ -51,7 +53,6 @@ function M.setup(profile)
       end
     }
   )
-  end
 end
 
 return M

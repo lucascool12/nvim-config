@@ -2,7 +2,6 @@ local config_util = require'config-util'
 local M = {}
 local path = require'plenary.path'
 local profile = path:new(vim.fn.stdpath('data'), "neovim-env")
-local args = { "install", "add_package" }
 local providers = require'neovim-env.providers'
 
 function M.mason()
