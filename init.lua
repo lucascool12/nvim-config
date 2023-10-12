@@ -17,6 +17,10 @@ require'lazy'.setup(plugins)
 local path = require'plenary.path'
 local win32yank_path = path.new("~/.local/bin/win32yank.exe")
 win32yank_path:expand()
+local function on_wsl()
+  local wslinterop_path = path.new{"/proc/sys/fs/binfmt_misc/WSLInterop"}
+  return wslinterop_path:exists()
+end
 
 vim.cmd([[set modelines=0]])
 -- set termguicolors to enable highlight groups
@@ -41,7 +45,7 @@ vim.api.nvim_create_autocmd(
   }
 )
 
-if win32yank_path:exists() then
+if not on_wsl() or win32yank_path:exists() then
   vim.cmd([[
   set clipboard+=unnamed
   ]])

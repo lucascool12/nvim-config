@@ -11,6 +11,7 @@ autocmd FileType lua setlocal ts=2 sts=2 sw=2
 
 -- No back and forth
 vim.cmd("set signcolumn=yes")
+vim.cmd("set linebreak")
 
 -- better line numbers
 vim.cmd([[set number]])
