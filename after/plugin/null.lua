@@ -1,10 +1,5 @@
-if true then
-  return {}
-end
-
 local null_ls = require'null-ls'
 local method = require'null-ls.methods'
-local flake8_config = { '--max-line-length', '120' }
 local helpers = require'null-ls.helpers'
 
 null_ls.setup{
@@ -15,18 +10,28 @@ null_ls.setup{
         update_in_insert = false,
       },
     },
-    -- null_ls.builtins.diagnostics.flake8.with(
-    --   (function ()
-    --     local args = null_ls.builtins.diagnostics.flake8._opts.args
-    --     for index, arg in ipairs(flake8_config) do
-    --       table.insert(args, index, arg)
-    --     end
-    --     return {
-    --       args = args,
-    --     }
-    --   end)()
-    -- ),
-    null_ls.builtins.diagnostics.mypy.with({
+  },
+}
+
+if vim.fn.executable('flake8') == 1 then
+  local flake8_config = { '--max-line-length', '120' }
+  local flake_8 = null_ls.builtins.diagnostics.flake8
+  -- local flake_8 = null_ls.builtins.diagnostics.flake8.with(
+  -- (function ()
+  --   local args = null_ls.builtins.diagnostics.flake8._opts.args
+  --   for index, arg in ipairs(flake8_config) do
+  --     table.insert(args, index, arg)
+  --   end
+  --   return {
+  --     args = args,
+  --   }
+  -- end)()
+  -- )
+  null_ls.register(flake_8)
+end
+
+if vim.fn.executable('mypy') == 1 then
+    local mypy = null_ls.builtins.diagnostics.mypy.with({
       method = method.internal.DIAGNOSTICS_ON_SAVE,
       extra_args = function ()
         if vim.env.VIRTUAL_ENV then
@@ -37,9 +42,9 @@ null_ls.setup{
           return {}
         end
       end
-    }),
-  },
-}
+    })
+    null_ls.register(null_ls)
+end
 
 if vim.fn.executable('folint') == 1 then
   local folint = {
