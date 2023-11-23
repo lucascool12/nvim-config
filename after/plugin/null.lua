@@ -1,3 +1,6 @@
+if true then
+  return
+end
 local null_ls = require'null-ls'
 local method = require'null-ls.methods'
 local helpers = require'null-ls.helpers'

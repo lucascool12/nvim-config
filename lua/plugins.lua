@@ -93,9 +93,12 @@ return {
   { 'goerz/jupytext.vim', event = 'VeryLazy' },
   'nvim-lua/plenary.nvim',
   { 'mfussenegger/nvim-dap', event = 'VeryLazy' },
+  -- {
+  --   'jose-elias-alvarez/null-ls.nvim',
+  --   dependencies = { 'nvim-lua/plenary.nvim' },
+  -- },
   {
-    'jose-elias-alvarez/null-ls.nvim',
-    dependencies = { 'nvim-lua/plenary.nvim' },
+    'mfussenegger/nvim-lint'
   },
 	{ 'feline-nvim/feline.nvim', dependencies = { 'nvim-tree/nvim-web-devicons' }},
 
