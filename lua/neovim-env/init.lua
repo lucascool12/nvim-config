@@ -26,8 +26,12 @@ function M.setup_new_lsps()
     end
       ::continue::
   end
-  local cmds = config_util.ls(tostring(profile:joinpath("bin")))
-  for _, cmd in pairs(cmds) do
+  -- local cmds = config_util.ls(tostring(profile:joinpath("bin")))
+  for cmd, _ in pairs(cmd_to_server) do
+    local executable = vim.fn.executable(cmd)
+    if  executable == 0 or executable == -1 then
+      goto continue
+    end
     local lsp = cmd_to_server[cmd]
     if inited[lsp] or lsp == nil then
       goto continue

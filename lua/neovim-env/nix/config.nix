@@ -12,6 +12,8 @@ in
                 gnumake
                 tree-sitter
                 unstable.nil
+                zig
+                rust-analyzer
             ];
         };
     };

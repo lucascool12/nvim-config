@@ -9,7 +9,7 @@ local M = {}
 M.present = env_conf.nix_present
 
 function M.setup(profile)
-  vim.env.PATH = string.format("%s:%s", profile:joinpath("bin"), vim.env.PATH)
+  vim.env.PATH = string.format("%s:%s", vim.env.PATH, profile:joinpath("bin"))
   if type(profile) == "string" then
     profile = path:new(profile)
   end
