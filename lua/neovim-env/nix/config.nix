@@ -7,12 +7,15 @@ in
             name = "neovimEnv";
             paths = [
                 unstable.lua-language-server
+                vale
                 lazygit
                 ripgrep
                 gnumake
-                tree-sitter
                 unstable.nil
-                zig
+                gcc
+                unstable.nodePackages.pyright
+                nodePackages_latest.typescript-language-server
+                python311Packages.flake8
                 rust-analyzer
             ];
         };
