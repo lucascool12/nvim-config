@@ -17,6 +17,7 @@ in
                 nodePackages_latest.typescript-language-server
                 python311Packages.flake8
                 rust-analyzer
+                nodejs
             ];
         };
     };

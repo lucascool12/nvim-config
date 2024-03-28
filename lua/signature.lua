@@ -271,7 +271,7 @@ local cur_buf = -1
 
 vim.keymap.set('i', '<C-e>',
 function ()
-  if vim.api.nvim_win_is_valid(cur_win) then
+  if type(cur_win) == "number" and vim.api.nvim_win_is_valid(cur_win) then
     close_preview_window(cur_win, { cur_buf, vim.api.nvim_get_current_win() })
     -- vim.keymap.del('i', '<C-e>')
   end

@@ -72,6 +72,37 @@ return {
     end,
   },
   -- { 'HiPhish/guile.vim', url='https://gitlab.com/HiPhish/guile.vim'},
+  {
+    "nvim-neorg/neorg",
+    build = ":Neorg sync-parsers",
+    tag = "v7.0.0",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("neorg").setup {
+        load = {
+          ["core.defaults"] = {}, -- Loads default behaviour
+          ["core.export"] = {},
+          ["core.concealer"] = {
+            config = {
+              folds = false,
+            }
+          }, -- Adds pretty icons to your documents
+          ["core.completion"] = {
+            config = {
+              engine = "nvim-cmp",
+            },
+          },
+          ["core.dirman"] = { -- Manages Neorg workspaces
+            config = {
+              workspaces = {
+                notes = "~/notes",
+              },
+            },
+          },
+        },
+      }
+    end,
+  },
   { 'HiPhish/guile.vim' },
   'lukas-reineke/indent-blankline.nvim',
   'ggandor/leap.nvim',
@@ -143,7 +174,7 @@ return {
   'saadparwaiz1/cmp_luasnip',
   'Vimjas/vim-python-pep8-indent',
   {
-    'nvim-telescope/telescope.nvim', tag = '0.1.0',
+    'nvim-telescope/telescope.nvim', branch = '0.1.x',
     -- or                            , branch = '0.1.x',
     dependencies = {
       'nvim-lua/plenary.nvim',
@@ -157,6 +188,12 @@ return {
     event = 'VeryLazy',
     run = function() vim.fn['mkdp#util#install']() end,
   }),
+  {
+    "iamcco/markdown-preview.nvim",
+    run = "cd app && npm install",
+    setup = function() vim.g.mkdp_filetypes = { "markdown" } end,
+    ft = { "markdown" },
+  },
   { 'williamboman/mason.nvim', event = 'VeryLazy' },
   { 'williamboman/mason-lspconfig.nvim', event = 'VeryLazy' },
   { 'windwp/nvim-ts-autotag', event = 'VeryLazy' },

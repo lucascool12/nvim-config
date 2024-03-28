@@ -5,6 +5,7 @@ nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <leader>gf <cmd>Telescope git_files<cr>
 nnoremap <leader>u  <cmd>Telescope undo<cr>
+nnoremap <leader>t  <cmd>Telescope<cr>
 ]])
 
 require("telescope").setup({

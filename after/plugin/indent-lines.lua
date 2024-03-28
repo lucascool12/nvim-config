@@ -9,8 +9,8 @@ for group, color in pairs(highlights) do
   vim.api.nvim_set_hl(0, group, color)
 end
 
-require("ibl").setup {
+-- require("ibl").setup {
   -- for example, context is off by default, use this to turn it on
   -- show_current_context = true,
   -- show_current_context_start = true,
-}
+-- }

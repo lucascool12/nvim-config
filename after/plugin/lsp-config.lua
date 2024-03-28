@@ -86,7 +86,8 @@ nenv.lsp_handlers{
           },
           workspace = {
             -- Make the server aware of Neovim runtime files
-            library = table.insert(vim.api.nvim_get_runtime_file("", true), { vim.fs.normalize(vim.fn.stdpath("config") .. "/lua")}),
+            library = table.insert(vim.api.nvim_get_runtime_file("", true),
+            { vim.fs.normalize(vim.fn.stdpath("config") .. "/lua")}),
           },
           -- Do not send telemetry data containing a randomized but unique identifier
           telemetry = {
@@ -214,7 +215,7 @@ vim.api.nvim_create_autocmd({ "CursorHold" }, {
 for type, icon in pairs({
 	Error = "",
 	Warn = "",
-	Hint = "",
+	Hint = "󰌶",
 	Info = "",
 }) do
 	local hl = "DiagnosticSign" .. type

@@ -9,12 +9,15 @@ function M.mason()
 end
 
 local lsp_config
+local ignored = {
+  rls = true,
+}
 local inited = {}
 
 function M.setup_new_lsps()
   local cmd_to_server = require'neovim-env.cmd_to_server'
   for lsp, conf in pairs(lsp_config) do
-    if type(lsp) ~= 'string' then
+    if type(lsp) ~= 'string' or ignored[lsp] then
       goto continue
     end
     if conf.cmd ~= nil then
@@ -33,7 +36,7 @@ function M.setup_new_lsps()
       goto continue
     end
     local lsp = cmd_to_server[cmd]
-    if inited[lsp] or lsp == nil then
+    if inited[lsp] or lsp == nil or ignored[lsp] then
       goto continue
     end
     if lsp_config[lsp] ~= nil then
