@@ -31,6 +31,80 @@ local lsp_flags = {
 
 require'neovim-env'.setup()
 
+local default = true
+local features = {}
+
+local rust_an_config = {
+  flags = lsp_flags,
+  capabilities = capabilities,
+  -- Server-specific settings...
+  settings = {
+    ["rust-analyzer"] = {
+      cargo = {
+        noDefaultFeatures = not default,
+        features = features,
+      }
+    }
+  }
+}
+
+local rust_on_attach = function (client, bufnr)
+  on_attach(client, bufnr)
+  vim.api.nvim_create_user_command("RustAnalyzer", function (opts)
+    local stringtoboolean = { ["true"]=true, ["false"]=false }
+    if opts.fargs[1] == "default" then
+      local val = stringtoboolean[opts.fargs[2]]
+      if val ~= nil then
+        default = val
+      else
+        vim.api.nvim_err_write("Wrong Value!")
+        return
+      end
+    elseif opts.fargs[1] == "features" then
+      for id, feature in ipairs(opts.fargs) do
+        if id < 2 then
+          goto continue
+        end
+        table.insert(features, feature)
+        ::continue::
+      end
+    end
+    local config = vim.tbl_extend("force", rust_an_config, {
+      settings = {
+        ["rust-analyzer"] = {
+          cargo = {
+            noDefaultFeatures = not default,
+            features = features,
+          }
+        }
+      }
+    })
+    require'lspconfig'["rust_analyzer"].setup(config)
+  end, {
+    nargs = "+",
+    complete = function(_, CmdLine, _)
+      local count = 0
+      local is_default = false
+      for val in string.gmatch(CmdLine, "([^%s]+)") do
+        count = count + 1
+        if count > 1 and not is_default then
+          if val == "default" then
+            is_default = true
+          else
+            return {}
+          end
+        end
+      end
+      if is_default and count == 2 then
+        return {"true", "false"}
+      end
+      return {"default", "features"}
+    end,
+  })
+end
+
+rust_an_config.on_attach = rust_on_attach
+
 nenv.lsp_handlers{
   {
     on_attach = on_attach,
@@ -98,15 +172,7 @@ nenv.lsp_handlers{
     },
   },
   ['rust_analyzer'] = {
-    {
-      on_attach = on_attach,
-      flags = lsp_flags,
-      capabilities = capabilities,
-      -- Server-specific settings...
-      settings = {
-        ["rust-analyzer"] = {}
-      }
-    },
+    rust_an_config,
   },
   ['turtle_ls'] = {
     {
